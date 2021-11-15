@@ -11,14 +11,11 @@ public class Client implements User {
     {
         return username;
     }
-    @Override
-    public void Login() {
+
+
+    public void registerClient(String username,String email,String password,String mobileNumber) {
 
     }
 
-    @Override
-    public void Register(String username,String email,String password,String mobileNumber) {
-
-    }
 
 }

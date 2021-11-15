@@ -2,44 +2,17 @@ package Ratings;
 import Driver.Driver;
 import Client.Client;
 
+import java.util.List;
+
 public class ClientRatings implements Ratings {
 
-   /*public void addRating(int rate, Driver driver, Client client)
-    {
-        boolean found = false;
-        for(int i = 0; i < drivers.size(); i++)
-        {
-            if(drivers.get(i).getUsername().equals(driver.getUsername()) && clients.get(i).getUsername().equals(client.getUsername()))
-            {
-                found = true;
-                rates.set(i, rate);
-            }
-        }
-        if(!found)
-        {
-            clients.add(client);
-            drivers.add(driver);
-            rates.add(rate);
-        }
-    }*/
-    public void addRating(int rate, Driver driver, Client client)
-    {
-        clients.add(client);
-        drivers.add(driver);
-        rates.add(rate);
-    }
+    List<Integer> driverRates = null;
+    String driver;
+    @Override
+    public void viewRatings(List<Integer> ratings) {
 
-    public double viewAvgRating(Driver driver)
-    {
-        double sum = 0, num = 0;
-        for(int i = 0; i < rates.size(); i++)
-        {
-            if(drivers.get(i).getUsername().equals(driver.getUsername()))
-            {
-                sum += rates.get(i);
-                num++;
-            }
-        }
-        return sum / num;
     }
+    public void addRate(int rating){
+
+    };
 }

@@ -12,9 +12,9 @@ public interface AdminServices {
     List<User> suspendedUsers = null;
     List<Client> clients = null;
     List<Driver> drivers = null;
-    public void VerifyDriverRegistration();
+    public void verifyDriverRegistration();
     public List<Driver> listPendingDrivers();
-    public void SuspendAccount();
+    public void suspendAccount();
 
 
 

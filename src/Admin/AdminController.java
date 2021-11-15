@@ -8,7 +8,7 @@ public class AdminController implements AdminServices {
 
 
     @Override
-    public void VerifyDriverRegistration() {
+    public void verifyDriverRegistration() {
 
     }
 
@@ -18,7 +18,7 @@ public class AdminController implements AdminServices {
     }
 
     @Override
-    public void SuspendAccount() {
+    public void suspendAccount() {
 
     }
 }
