@@ -6,9 +6,11 @@ import User.Status;
 
 public class Client implements User {
 
-    private  String drivingLicense;
-    private String nationalID;
 
+    public String getUsername()
+    {
+        return username;
+    }
     @Override
     public void Login() {
 
