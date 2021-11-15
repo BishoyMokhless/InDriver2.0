@@ -13,6 +13,5 @@ public class ClientRatings implements Ratings {
 
     }
     public void addRate(int rating){
-
-    };
+    }
 }
