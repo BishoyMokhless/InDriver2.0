@@ -5,7 +5,10 @@ import User.Status;
 
 public class Driver implements User
 {
-    public String getUserName()
+    private  String drivingLicense;
+    private String nationalID;
+
+    public String getUsername()
     {
         return username;
     }
