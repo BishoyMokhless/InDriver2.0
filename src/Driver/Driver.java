@@ -116,7 +116,7 @@ public class Driver implements User
 
 
     public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
-        setter("nationalID", nationalID);
+
     }
 
     public List<String> getFavoriteAreas() {
