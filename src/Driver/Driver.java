@@ -5,6 +5,7 @@ import connection.Connect;
 import Ratings.Ratings;
 import User.User;
 import User.Status;
+import User.userData;
 import connection.Connect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,11 +14,11 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Scanner;
 
-public class Driver implements User
+public class Driver extends userData implements User
 {
-    private  String drivingLicense;
+    private String drivingLicense;
     private String nationalID;
-    private List<String> favoriteAreas;
+    private String favoriteAreas;
 
     private ResultSet getter() throws SQLException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
@@ -44,87 +45,91 @@ public class Driver implements User
     }
 
     public String getUsername() throws SQLException, ClassNotFoundException {
-
-        String data = getter().getString("username");
-        return data;
+        username = getter().getString("username");
+        return username;
     }
 
     public String getEmail() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("email");
-        return data;
+        email = getter().getString("email");
+        return email;
     }
 
     public String getPassword() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("pass");
-        return data;
+        password = getter().getString("pass");
+        return password;
     }
 
     public String getMobileNumber() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("mobileNumber");
-        return data;
+        mobileNumber = getter().getString("mobileNumber");
+        return mobileNumber;
     }
 
     public Status getStatus() throws SQLException, ClassNotFoundException {
         String data = getter().getString("status");
-
         if(Status.UnVerified.toString().equals(data))
-            status.equals(Status.Verified);
+            status = Status.Verified;
         else if(Status.Suspended.toString().equals(data))
-            status.equals(Status.Verified);
+            status = Status.Verified;
         else
-            status.equals(Status.Verified);
+            status = Status.Verified;
         return status;
     }
 
     public String getDrivingLicense() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("drive_license");
-        return data;
+        drivingLicense = getter().getString("drive_license");
+        return drivingLicense;
     }
 
     public String getNationalID() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("nationalID");
-        return data;
+       nationalID = getter().getString("nationalID");
+        return nationalID;
     }
 
     public String getFavoriteAreas() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("favarea");
-        return data;
+        favoriteAreas = getter().getString("favarea");
+        return favoriteAreas;
     }
 
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
         setter("username", username);
+        this.username = username;
     }
 
     @Override
     public void setEmail(String email) throws SQLException, ClassNotFoundException {
         setter("email", email);
+        this.email = email;
     }
 
     @Override
     public void setPassword(String password) throws SQLException, ClassNotFoundException {
         setter("pass", password);
+        this.password = password;
     }
 
     @Override
     public void setStatus(Status status) throws SQLException, ClassNotFoundException {
         String temp = status.toString();
         setter("status", temp);
+        this.status = status;
     }
 
     public void setDrivingLicense(String drivingLicense) throws SQLException, ClassNotFoundException {
         setter("drive_license", drivingLicense);
+        this.drivingLicense = drivingLicense;
     }
 
     public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
         setter("nationalID", nationalID);
+        this.nationalID = nationalID;
     }
 
     public void setFavoriteAreas(String favoriteAreas) throws SQLException, ClassNotFoundException {
         setter("favarea", favoriteAreas);
+        this.favoriteAreas = favoriteAreas;
     }
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
-
         int queryResult= 0;
         String query = "";
         Connect C1 = new Connect();
@@ -143,6 +148,5 @@ public class Driver implements User
         queryResult = statement.executeUpdate(query);
 
         statement.close();
-
     }
 }
