@@ -1,27 +1,21 @@
 package Client;
 
-import Offer.Offer;
-
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import Offer.Offer;
+import Offer.OfferController;
 public class ClientController implements  ClientServices {
 
+    Offer offer = new OfferController();
 
     @Override
-    public void RequestRide(String Destination, String Source, int price) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the source: ");
-        Source = scanner.nextLine();
-        System.out.print("Enter your destination: ");
-        Destination = scanner.nextLine();
-        System.out.print("Enter your offer : ");
-        price = scanner.nextInt();
+    public void RequestRide(int client_id,int driver_id ,String Destination, String Source, float price) throws SQLException, ClassNotFoundException {
+
+        offer.sendOffer(client_id,driver_id,price,Source,Destination);
+
 
     }
 
-     public static void main(String[] args) {
-        ClientController client = new ClientController();
-        client.RequestRide("a","a", 5);
-    }
 
 }

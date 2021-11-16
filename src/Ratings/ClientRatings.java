@@ -6,10 +6,10 @@ import java.util.List;
 
 public class ClientRatings implements Ratings {
 
-    List<Integer> driverRates = null;
+    List<Float> driverRates = null;
     String driver;
     @Override
-    public void viewRatings(List<Integer> ratings) {
+    public void viewRatings(List<Float> ratings) {
 
     }
     public void addRate(int rating){
