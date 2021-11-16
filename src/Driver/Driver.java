@@ -8,6 +8,7 @@ import User.User;
 import User.Status;
 import connection.Connect;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,6 +32,18 @@ public class Driver implements User
         rs.next();
         return rs;
     }
+    private void setter(String column , String rowData) throws SQLException, ClassNotFoundException
+    {
+        Scanner scanner = new Scanner(System.in);
+        int queryResult= 0;
+        Connect C1 = new Connect();
+        C1.establish_connection();
+        String query = "update driver set " + column + " = ?";
+        PreparedStatement preparedStmt = C1.establish_connection().prepareStatement(query);
+        preparedStmt.setString(1, rowData);
+        preparedStmt.executeUpdate();
+        C1.establish_connection().close();
+    }
 
     public String getUsername() throws SQLException, ClassNotFoundException {
 
@@ -53,29 +66,36 @@ public class Driver implements User
         return data;
     }
 
-    public String getStatus() throws SQLException, ClassNotFoundException {
+    public Status getStatus() throws SQLException, ClassNotFoundException {
         String data = getter().getString("status");
-        return data;
+
+        if(Status.UnVerified.toString().equals(data))
+            status.equals(Status.Verified);
+        else if(Status.Suspended.toString().equals(data))
+            status.equals(Status.Verified);
+        else
+            status.equals(Status.Verified);
+        return status;
     }
 
-    public void setUsername(String username)
-    {
-
-    }
-
-    @Override
-    public void setEmail(String email) {
-
-    }
-
-    @Override
-    public void setPassword(String password) {
-
+    public void setUsername(String username) throws SQLException, ClassNotFoundException {
+        setter("username", username);
     }
 
     @Override
-    public void setStatus(Status status) {
+    public void setEmail(String email) throws SQLException, ClassNotFoundException {
+        setter("email", email);
+    }
 
+    @Override
+    public void setPassword(String password) throws SQLException, ClassNotFoundException {
+        setter("pass", password);
+    }
+
+    @Override
+    public void setStatus(Status status) throws SQLException, ClassNotFoundException {
+        String temp = status.toString();
+        setter("status", temp);
     }
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {

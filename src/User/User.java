@@ -20,12 +20,12 @@ public interface User {
      public String getEmail() throws SQLException, ClassNotFoundException;
      public String getPassword() throws SQLException, ClassNotFoundException;
      public String getMobileNumber() throws SQLException, ClassNotFoundException;
-     public String getStatus() throws SQLException, ClassNotFoundException;
+     public Status getStatus() throws SQLException, ClassNotFoundException;
 
-     public void setUsername(String username);
-     public void setEmail(String email);
-     public void setPassword(String password);
-     public void setStatus(Status status);
+     public void setUsername(String username) throws SQLException, ClassNotFoundException;
+     public void setEmail(String email) throws SQLException, ClassNotFoundException;
+     public void setPassword(String password) throws SQLException, ClassNotFoundException;
+     public void setStatus(Status status) throws SQLException, ClassNotFoundException;
 
      public default void Login(String username, String password) throws SQLException, ClassNotFoundException {
           Scanner scanner = new Scanner(System.in);
