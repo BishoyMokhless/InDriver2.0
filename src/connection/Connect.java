@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 
 public class Connect {
 
-    private  String url="jdbc:mysql://localhost:3306/sw";
+    private  String url="jdbc:mysql://localhost:3306/sprint1";
     public Connection  establish_connection() throws SQLException, ClassNotFoundException {
 
         //\connect root@localhost
@@ -17,29 +17,29 @@ public class Connect {
         //   System.out.println("good");
         return conn;
     }
-    public  void read() throws SQLException, ClassNotFoundException{
-
+    public void read_drivers() throws SQLException, ClassNotFoundException {
         Connection conn=establish_connection();
-        String query="INSERT INTO user (firstname,lastname,email )"+" VALUES(?, ?, ? ) ";
-        PreparedStatement preparedStmt = conn.prepareStatement(query);
-        preparedStmt.setString(1,"sona");
-        preparedStmt.setString(2,"sona2");
-        preparedStmt.setString(3,"@123456");
-        preparedStmt.executeUpdate();
-
-
+        String query="SELECT * FROM driver";
+        Statement st=conn.createStatement();
+        ResultSet re=st.executeQuery(query);
+        while(re.next())
+        {
+            System.out.println(re.getString("username"));
+        }
     }
 
      public static void main(String[] args) {
 
-         Connect C1 = new Connect();
-        try {
-            C1.read() ;
-        }
-        catch (Exception e)
-        {
 
-        }
+          /////////test database
+         Connect C1 = new Connect();
+         try {
+             C1.read_drivers() ;
+         }
+         catch (Exception E)
+         {
+             System.out.println(E);
+         }
      }
 
 

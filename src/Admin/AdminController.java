@@ -15,7 +15,7 @@ public class AdminController implements AdminServices {
 
         if(licenseID.length() == 14 && nationalID.length() == 14)
         {
-            driver.getStatus()
+            driver.getStatus();
         }
 
 
