@@ -30,17 +30,16 @@ public interface User {
           Connect C1 = new Connect();
           C1.establish_connection();
           Statement statement = C1.establish_connection().createStatement();
-          ResultSet rs = statement.executeQuery("select * from driver Where username = " + username + "and pass = " + password);
+          ResultSet rs = statement.executeQuery("select * from driver Where username = '" + username + "and pass = '" + password + "'");
           if(rs.next())
                System.out.println("Logged in successfully");
           else
           {
-               rs = statement.executeQuery("select * from client Where username = " + username + "and pass = " + password);
+               rs = statement.executeQuery("select * from client Where username = '" + username + "' and pass = '" + password + "'");
                if(rs.next())
                     System.out.println("Logged in successfully");
                else
                     System.out.println("username or password is incorrect");
-
           }
           statement.close();
      }
