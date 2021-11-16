@@ -58,7 +58,6 @@ public class Driver implements User
 
     public String getPassword() throws SQLException, ClassNotFoundException {
         String data = getter().getString("pass");
-
         return data;
     }
 
@@ -129,24 +128,11 @@ public class Driver implements User
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
 
-        Scanner scanner = new Scanner(System.in);
         int queryResult= 0;
         String query = "";
         Connect C1 = new Connect();
         C1.establish_connection();
         Statement statement = C1.establish_connection().createStatement();
-        System.out.print("Enter the userName: ");
-        username = scanner.nextLine();
-        System.out.print("Enter the Email: ");
-        email = scanner.nextLine();
-        System.out.print("Enter the Password: ");
-        password = scanner.nextLine();
-        System.out.print("Enter the mobileNumber: ");
-        mobileNumber = scanner.nextLine();
-        System.out.print("Enter the drivingLicense: ");
-        drivingLicense = scanner.nextLine();
-        System.out.print("Enter the nationalID: ");
-        nationalID = scanner.nextLine();
 
         //push in database
 

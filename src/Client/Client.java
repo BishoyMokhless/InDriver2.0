@@ -62,27 +62,11 @@ public class Client implements User {
 
 
     public void registerClient(String username,String email,String password,String mobileNumber) throws SQLException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
         int queryResult= 0;
         String query = "";
         Connect C1 = new Connect();
         C1.establish_connection();
         Statement statement = C1.establish_connection().createStatement();
-
-
-
-
-
-
-        System.out.print("Enter the userName: ");
-        username = scanner.nextLine();
-        System.out.print("Enter the Email: ");
-        email = scanner.nextLine();
-        System.out.print("Enter the Password: ");
-        password = scanner.nextLine();
-        System.out.print("Enter the mobileNumber: ");
-        mobileNumber = scanner.nextLine();
-
 
         //push in database
 
