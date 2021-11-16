@@ -3,8 +3,9 @@ package Offer;
 public class OfferController implements Offer {
 
     @Override
-    public String sendOffer(String price, String source, String destination) {
-        return null;
+    public String sendOffer(int price, String source, String destination) {
+        return source;
+
     }
 
     @Override
