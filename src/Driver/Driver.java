@@ -1,5 +1,4 @@
 package Driver;
-
 import User.User;
 import User.Status;
 import connection.Connect;
@@ -7,7 +6,6 @@ import Ratings.Ratings;
 import User.User;
 import User.Status;
 import connection.Connect;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -89,6 +87,10 @@ public class Driver implements User
         return data;
     }
 
+    public String getFavoriteAreas() throws SQLException, ClassNotFoundException {
+        String data = getter().getString("favarea");
+        return data;
+    }
 
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
         setter("username", username);
@@ -114,17 +116,12 @@ public class Driver implements User
         setter("drive_license", drivingLicense);
     }
 
-
     public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
-
+        setter("nationalID", nationalID);
     }
 
-    public List<String> getFavoriteAreas() {
-        return favoriteAreas;
-    }
-
-    public void setFavoriteAreas(List<String> favoriteAreas) {
-        this.favoriteAreas = favoriteAreas;
+    public void setFavoriteAreas(String favoriteAreas) throws SQLException, ClassNotFoundException {
+        setter("favarea", favoriteAreas);
     }
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
