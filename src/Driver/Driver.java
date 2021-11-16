@@ -15,34 +15,54 @@ public class Driver implements User
     private String nationalID;
     private List<String> favoriteAreas;
 
+    private ResultSet getter()
+    {
+        Scanner scanner = new Scanner(System.in);
+        int queryResult= 0;
+        String query = "";
+        Connect C1 = new Connect();
+        C1.establish_connection();
+        Statement statement = C1.establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select * from driver Where username = '" + username + "'");
+        rs.next();
+        return rs;
+    }
+
     public String getUsername()
     {
-        return username;
+        String data = getter().getString("username");
+        return data;
     }
 
-    @Override
-    public String getEmail() {
-        return null;
+    public String getEmail()
+    {
+        String data = getter().getString("email");
+        return data;
     }
 
-    @Override
-    public String getPassword() {
-        return null;
+    public String getPassword()
+    {
+        String data = getter().getString("pass");
+        return data;
     }
 
-    @Override
-    public String getMobileNumber() {
-        return null;
+    public String getMobileNumber()
+    {
+        String data = getter().getString("mobileNumber");
+        return data;
     }
 
-    @Override
-    public Status getStatus() {
-        return null;
+    public Status getStatus()
+    {
+        String data = getter().getString("status");
+        return data;
     }
 
-    @Override
-    public void setUsername(String username) {
-
+    public void setUsername(String username)
+    {
+        UPDATE table_name
+        SET column1 = value1, column2 = value2, ...
+        WHERE condition;
     }
 
     @Override
@@ -74,12 +94,6 @@ public class Driver implements User
         Connect C1 = new Connect();
         C1.establish_connection();
         Statement statement = C1.establish_connection().createStatement();
-
-
-
-
-
-
         System.out.print("Enter the userName: ");
         username = scanner.nextLine();
         System.out.print("Enter the Email: ");
@@ -95,7 +109,7 @@ public class Driver implements User
 
         //push in database
 
-        query = "INSERT INTO client(username,email,pass,nationalID,drive_license," +
+        query = "INSERT INTO driver(username,email,pass,nationalID,drive_license," +
                 "mobileNumber) VALUES ("
                 +"'"+username+"',"
                 +"'"+email+"',"
