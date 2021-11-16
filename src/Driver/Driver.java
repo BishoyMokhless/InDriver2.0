@@ -45,6 +45,7 @@ public class Driver implements User
 
     public String getPassword() throws SQLException, ClassNotFoundException {
         String data = getter().getString("pass");
+
         return data;
     }
 
