@@ -1,11 +1,19 @@
 package Admin;
 
 import Driver.Driver;
+import User.Status;
+import User.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminController implements AdminServices {
 
+
+    @Override
+    public List<Driver> getDrivers() {
+        return drivers;
+    }
 
     @Override
     public void verifyDriverRegistration(Driver driver) {
@@ -23,11 +31,22 @@ public class AdminController implements AdminServices {
 
     @Override
     public List<Driver> listPendingDrivers() {
-        return null;
+
+        List<Driver> pendingDrivers = new ArrayList<Driver>();
+        for (int i=0; i < drivers.size(); i++)
+        {
+            Driver  testDriver = drivers.get(i);
+            if(testDriver.getStatus() == Status.UnVerified)
+            {
+             pendingDrivers.add(testDriver);
+            }
+
+        }
+        return pendingDrivers;
     }
 
     @Override
-    public void suspendAccount() {
-
+    public void suspendAccount(User user) {
+       user.getStatus().equals(Status.Suspended);
     }
 }
