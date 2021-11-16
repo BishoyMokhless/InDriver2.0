@@ -4,6 +4,7 @@ import Driver.Driver;
 import User.Status;
 import User.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class AdminController implements AdminServices {
     }
 
     @Override
-    public void verifyDriverRegistration(Driver driver) {
+    public void verifyDriverRegistration(Driver driver) throws SQLException, ClassNotFoundException {
         String licenseID = driver.getDrivingLicense();
         String nationalID = driver.getNationalID();
 
@@ -30,7 +31,7 @@ public class AdminController implements AdminServices {
     }
 
     @Override
-    public List<Driver> listPendingDrivers() {
+    public List<Driver> listPendingDrivers() throws SQLException, ClassNotFoundException {
 
         List<Driver> pendingDrivers = new ArrayList<Driver>();
         for (int i=0; i < drivers.size(); i++)
@@ -46,7 +47,7 @@ public class AdminController implements AdminServices {
     }
 
     @Override
-    public void suspendAccount(User user) {
+    public void suspendAccount(User user) throws SQLException, ClassNotFoundException {
        user.getStatus().equals(Status.Suspended);
     }
 }

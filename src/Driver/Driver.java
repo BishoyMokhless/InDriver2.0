@@ -78,6 +78,17 @@ public class Driver implements User
         return status;
     }
 
+    public String getDrivingLicense() throws SQLException, ClassNotFoundException {
+        String data = getter().getString("drive_license");
+        return data;
+    }
+
+    public String getNationalID() throws SQLException, ClassNotFoundException {
+        String data = getter().getString("nationalID");
+        return data;
+    }
+
+
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
         setter("username", username);
     }
@@ -96,6 +107,23 @@ public class Driver implements User
     public void setStatus(Status status) throws SQLException, ClassNotFoundException {
         String temp = status.toString();
         setter("status", temp);
+    }
+
+    public void setDrivingLicense(String drivingLicense) throws SQLException, ClassNotFoundException {
+        setter("drive_license", drivingLicense);
+    }
+
+
+    public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
+        setter("nationalID", nationalID);
+    }
+
+    public List<String> getFavoriteAreas() {
+        return favoriteAreas;
+    }
+
+    public void setFavoriteAreas(List<String> favoriteAreas) {
+        this.favoriteAreas = favoriteAreas;
     }
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
@@ -132,30 +160,5 @@ public class Driver implements User
 
         statement.close();
 
-    }
-
-
-    public String getDrivingLicense() {
-        return drivingLicense;
-    }
-
-    public void setDrivingLicense(String drivingLicense) {
-        this.drivingLicense = drivingLicense;
-    }
-
-    public String getNationalID() {
-        return nationalID;
-    }
-
-    public void setNationalID(String nationalID) {
-        this.nationalID = nationalID;
-    }
-
-    public List<String> getFavoriteAreas() {
-        return favoriteAreas;
-    }
-
-    public void setFavoriteAreas(List<String> favoriteAreas) {
-        this.favoriteAreas = favoriteAreas;
     }
 }

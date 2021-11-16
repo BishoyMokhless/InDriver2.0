@@ -35,7 +35,7 @@ public class Client implements User {
     }
 
     @Override
-    public String getStatus() {
+    public Status getStatus() {
         return null;
     }
 
