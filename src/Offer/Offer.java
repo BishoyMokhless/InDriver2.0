@@ -1,10 +1,12 @@
 package Offer;
 
+import java.sql.SQLException;
+
 public interface Offer  {
 
-    String price = null;
+    float price = 0;
     String source = null;
     String destination = null;
-    public String sendOffer(int price,String source,String destination);
-    public String receiveOffer(String price,String source,String destination);
+    public void sendOffer(int client_id, int driver_id, float price,String source,String destination) throws SQLException, ClassNotFoundException;
+    public void receiveOffer(int client_id, int driver_id, float price,String source,String destination) throws SQLException, ClassNotFoundException;
 }
