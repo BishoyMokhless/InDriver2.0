@@ -3,7 +3,12 @@ package Driver;
 import User.User;
 import User.Status;
 import connection.Connect;
+import Ratings.Ratings;
+import User.User;
+import User.Status;
+import connection.Connect;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -15,8 +20,7 @@ public class Driver implements User
     private String nationalID;
     private List<String> favoriteAreas;
 
-    private ResultSet getter()
-    {
+    private ResultSet getter() throws SQLException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         int queryResult= 0;
         String query = "";
@@ -28,41 +32,35 @@ public class Driver implements User
         return rs;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() throws SQLException, ClassNotFoundException {
+
         String data = getter().getString("username");
         return data;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() throws SQLException, ClassNotFoundException {
         String data = getter().getString("email");
         return data;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() throws SQLException, ClassNotFoundException {
         String data = getter().getString("pass");
         return data;
     }
 
-    public String getMobileNumber()
-    {
+    public String getMobileNumber() throws SQLException, ClassNotFoundException {
         String data = getter().getString("mobileNumber");
         return data;
     }
 
-    public Status getStatus()
-    {
+    public String getStatus() throws SQLException, ClassNotFoundException {
         String data = getter().getString("status");
         return data;
     }
 
     public void setUsername(String username)
     {
-        UPDATE table_name
-        SET column1 = value1, column2 = value2, ...
-        WHERE condition;
+
     }
 
     @Override
@@ -79,12 +77,6 @@ public class Driver implements User
     public void setStatus(Status status) {
 
     }
-
-    @Override
-    public void Login() {
-        User.super.Login();
-    }
-
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
 

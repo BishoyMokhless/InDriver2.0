@@ -35,7 +35,7 @@ public class Client implements User {
     }
 
     @Override
-    public Status getStatus() {
+    public String getStatus() {
         return null;
     }
 
@@ -54,10 +54,6 @@ public class Client implements User {
 
     }
 
-    @Override
-    public void Login() {
-        User.super.Login();
-    }
 
     @Override
     public void setStatus(Status status) {
