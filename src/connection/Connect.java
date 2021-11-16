@@ -18,6 +18,7 @@ public class Connect {
         return conn;
     }
     public void read_drivers() throws SQLException, ClassNotFoundException {
+
         Connection conn=establish_connection();
         String query="SELECT * FROM driver";
         Statement st=conn.createStatement();
