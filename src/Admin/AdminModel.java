@@ -3,7 +3,6 @@ package Admin;
 import Client.Client;
 import Driver.Driver;
 import User.User;
-
 import java.util.List;
 
 public class AdminModel {

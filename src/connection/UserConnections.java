@@ -1,12 +1,8 @@
 package connection;
-import Offer.OfferModel;
+
 import User.User;
-
 import java.sql.*;
-
 import java.util.*;
-
-import Ride.Ride;
 
 import static connection.DataBaseConnect.establish_connection;
 

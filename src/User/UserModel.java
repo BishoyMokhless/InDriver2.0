@@ -1,7 +1,6 @@
 package User;
 
 import Ratings.Ratings;
-
 import java.util.List;
 
 abstract public class UserModel {

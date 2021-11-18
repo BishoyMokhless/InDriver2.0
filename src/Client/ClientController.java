@@ -2,7 +2,6 @@ package Client;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import Offer.OfferController;
 import connection.OfferConnections;
 import connection.RideConnections;

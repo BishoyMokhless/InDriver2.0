@@ -1,7 +1,6 @@
 package Ratings;
 
 import connection.DataBaseConnect;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,8 +12,8 @@ public class DriverRatings implements Ratings
     List<Float> clientRates = new ArrayList<Float>();
     String client;
     @Override
-    public void viewRatings(List<Float> ratings) throws SQLException, ClassNotFoundException {
-
+    public void viewRatings(List<Float> ratings) throws SQLException, ClassNotFoundException
+    {
         int queryResult= 0;
         String query = "";
         DataBaseConnect.establish_connection();

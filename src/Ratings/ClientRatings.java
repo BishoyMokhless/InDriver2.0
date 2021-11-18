@@ -1,17 +1,17 @@
 package Ratings;
-import Driver.Driver;
-import Client.Client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientRatings implements Ratings {
 
-    List<Float> driverRates = null;
-    String driver;
+    List<Float> driverRates = new ArrayList<Float>();
+
     @Override
     public void viewRatings(List<Float> ratings) {
 
+
     }
-    public void addRate(int rating){
+    public void addRate(String clientName,String driver,int rating){
     }
 }

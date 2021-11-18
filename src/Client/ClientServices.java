@@ -1,6 +1,5 @@
 package Client;
 
-import Offer.Offer;
 import Offer.OfferController;
 import java.sql.SQLException;
 import java.util.List;

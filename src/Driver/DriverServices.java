@@ -1,10 +1,8 @@
 package Driver;
 
-
 import Offer.Offer;
 import Offer.OfferController;
 import Ride.Ride;
-
 import java.sql.SQLException;
 import java.util.List;
 

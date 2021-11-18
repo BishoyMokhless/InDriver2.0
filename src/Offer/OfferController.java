@@ -1,7 +1,6 @@
 package Offer;
 
 import connection.OfferConnections;
-
 import java.sql.SQLException;
 
 public class OfferController extends OfferModel implements Offer  {
