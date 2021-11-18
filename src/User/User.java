@@ -1,12 +1,10 @@
 package User;
 
-import Ratings.Ratings;
-import connection.Connect;
+import connection.DataBaseConnect;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Scanner;
 
 public interface User {
@@ -27,9 +25,8 @@ public interface User {
           Scanner scanner = new Scanner(System.in);
           int queryResult= 0;
           String query = "";
-          Connect C1 = new Connect();
-          C1.establish_connection();
-          Statement statement = C1.establish_connection().createStatement();
+           DataBaseConnect.establish_connection();
+          Statement statement = DataBaseConnect.establish_connection().createStatement();
           ResultSet rs = statement.executeQuery("select * from driver Where username = '" + username + "and pass = '" + password + "'");
           if(rs.next())
                System.out.println("Logged in successfully");

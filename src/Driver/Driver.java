@@ -2,7 +2,8 @@ package Driver;
 import Ride.Ride;
 import User.User;
 import User.Status;
-import connection.Connect;
+import connection.DataBaseConnect;
+import connection.UserConnections;
 import User.UserModel;
 
 import java.sql.SQLException;
@@ -48,53 +49,53 @@ public class Driver extends UserModel implements User
     }
 
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
-        Connect.setter("username", username, this);
+        UserConnections.setter("username", username, this);
         this.username = username;
     }
 
     @Override
     public void setEmail(String email) throws SQLException, ClassNotFoundException {
-        Connect.setter("email", email, this);
+        UserConnections.setter("email", email, this);
         this.email = email;
     }
 
     @Override
     public void setPassword(String password) throws SQLException, ClassNotFoundException {
-        Connect.setter("pass", password, this);
+        UserConnections.setter("pass", password, this);
         this.password = password;
     }
 
     @Override
     public void setStatus(Status status) throws SQLException, ClassNotFoundException {
         String temp = status.toString();
-        Connect.setter("status", temp,this);
+        UserConnections.setter("status", temp,this);
         this.status = status;
     }
 
     public void setDrivingLicense(String drivingLicense) throws SQLException, ClassNotFoundException {
-        Connect.setter("drive_license", drivingLicense, this);
+        UserConnections.setter("drive_license", drivingLicense, this);
         this.drivingLicense = drivingLicense;
     }
 
     public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
-        Connect.setter("nationalID", nationalID, this);
+        UserConnections.setter("nationalID", nationalID, this);
         this.nationalID = nationalID;
     }
 
     public void setFavoriteAreas(String area) throws SQLException, ClassNotFoundException {
-        Connect.setFavorite(username, area);
+        UserConnections.setFavorite(username, area);
         favoriteAreas.add(area);
     }
 
     public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, Status status, List<String> areas) throws SQLException, ClassNotFoundException {
         int queryResult= 0;
         String query = "";
-        Connect.establish_connection();
-        Statement statement = Connect.establish_connection().createStatement();
-        favoriteAreas = areas;
+        DataBaseConnect.establish_connection();
+        Statement statement = DataBaseConnect.establish_connection().createStatement();
+
         for(int i = 0; i < areas.size(); i++)
         {
-            Connect.setFavorite(username, areas.get(i));
+            UserConnections.setFavorite(username, areas.get(i));
         }
         //push in database
         query = "INSERT INTO driver(username,email,pass,nationalID,drive_license," +
@@ -114,6 +115,7 @@ public class Driver extends UserModel implements User
         this.mobileNumber = mobileNumber;
         this.drivingLicense = drivingLicense;
         this.nationalID = nationalID;
+        this.favoriteAreas = areas;
         if(Status.UnVerified.toString().equals(status))
             this.status = Status.UnVerified;
         else if(Status.Suspended.toString().equals(status))

@@ -6,14 +6,8 @@ public class OfferModel {
     String destination;
     String client;
     String driver;
+    boolean accepted;
 
-    public OfferModel(String client, float price, String source, String destination, String driver) {
-        this.client = client;
-        this.price = price;
-        this.source = source;
-        this.destination = destination;
-        this.driver = driver;
-    }
 
     public OfferModel() {
         this.price = 0;
@@ -21,6 +15,17 @@ public class OfferModel {
         this.destination = "";
         this.client = "";
         this.driver = "";
+        this.accepted = false;
+
+    }
+
+    public OfferModel(float price, String source, String destination, String client, String driver, boolean accepted) {
+        this.price = price;
+        this.source = source;
+        this.destination = destination;
+        this.client = client;
+        this.driver = driver;
+        this.accepted = accepted;
     }
 
     public float getPrice() {
@@ -61,5 +66,24 @@ public class OfferModel {
 
     public void setDriver(String driver) {
         this.driver = driver;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    @Override
+    public String toString() {
+        return "OfferModel{" +
+                "price=" + price +
+                ", source='" + source + '\'' +
+                ", destination='" + destination + '\'' +
+                ", client='" + client + '\'' +
+                ", driver='" + driver + '\'' +
+                '}';
     }
 }

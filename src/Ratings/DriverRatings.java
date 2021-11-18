@@ -1,25 +1,24 @@
 package Ratings;
 
-import Client.Client;
-import connection.Connect;
+import connection.DataBaseConnect;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DriverRatings implements Ratings
 {
-    List<Float> clientRates = null;
+    List<Float> clientRates = new ArrayList<Float>();
     String client;
     @Override
     public void viewRatings(List<Float> ratings) throws SQLException, ClassNotFoundException {
 
         int queryResult= 0;
         String query = "";
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        Statement statement = C1.establish_connection().createStatement();
+        DataBaseConnect.establish_connection();
+        Statement statement = DataBaseConnect.establish_connection().createStatement();
         query = "SELECT rate FROM rate Where client_id = " + client + ");";
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {

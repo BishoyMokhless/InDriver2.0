@@ -1,0 +1,71 @@
+package connection;
+import Offer.OfferModel;
+import User.User;
+
+import java.sql.*;
+
+import java.util.*;
+
+import Ride.Ride;
+
+import static connection.DataBaseConnect.establish_connection;
+
+public class UserConnections implements DataBaseConnect {
+
+
+
+    public static void setter(String column , String rowData, User obj) throws SQLException, ClassNotFoundException
+    {
+        Scanner scanner = new Scanner(System.in);
+        int queryResult= 0;
+        String type = "";
+        establish_connection();
+        if(obj.getClass().getName().equals("Driver"))
+            type = "driver";
+        else
+            type = "client";
+
+        String query = "update " + type + " set " + column + " = ?";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.setString(1, rowData);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+    }
+
+    public static void setFavorite(String username, String area) throws SQLException, ClassNotFoundException
+    {
+        Scanner scanner = new Scanner(System.in);
+        int queryResult= 0;
+        String type = "";
+        establish_connection();
+        String query = " insert into favArea (driverName, area) values (?, ?)";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.setString (1, username);
+        preparedStmt.setString (2, area);
+        establish_connection().close();
+    }
+
+
+
+   /* public static List<OfferModel> getOffer(String driverUsername) throws SQLException, ClassNotFoundException
+    {
+        OfferModel offer = new OfferModel();
+        List<OfferModel> offers = new ArrayList<OfferModel>();
+        establish_connection();
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select * Offer Where driverUsername = '" + driverUsername + "'");
+        while(rs.next())
+        {
+            offer.setClient(rs.getString("clientName"));
+            offer.setDriver(rs.getString("driverName"));
+            offer.setPrice(rs.getFloat("price"));
+            offer.setSource(rs.getString("source"));
+            offer.setDestination(rs.getString("destination"));
+            offers.add(offer);
+        }
+        return offers;
+    }*/
+
+
+
+}

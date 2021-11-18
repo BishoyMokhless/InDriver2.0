@@ -2,7 +2,7 @@ package Client;
 
 import User.User;
 import User.Status;
-import connection.Connect;
+import connection.DataBaseConnect;
 import User.UserModel;
 
 import java.sql.SQLException;
@@ -61,9 +61,9 @@ public class Client extends UserModel implements User {
     public void registerClient(String username,String email,String password,String mobileNumber) throws SQLException, ClassNotFoundException {
         int queryResult= 0;
         String query = "";
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        Statement statement = C1.establish_connection().createStatement();
+
+        DataBaseConnect.establish_connection();
+        Statement statement = DataBaseConnect.establish_connection().createStatement();
 
         //push in database
 
