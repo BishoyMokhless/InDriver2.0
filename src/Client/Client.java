@@ -4,57 +4,57 @@ import User.User;
 import User.Status;
 import connection.DataBaseConnect;
 import User.UserModel;
+import connection.UserConnections;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Client extends UserModel implements User {
 
-
-    public String getUsername()
-    {
+    @Override
+    public String getUsername() throws SQLException, ClassNotFoundException {
         return username;
     }
-
     @Override
-    public String getEmail() {
-        return null;
+    public String getEmail() throws SQLException, ClassNotFoundException {
+        return email;
+    }
+    @Override
+    public String getPassword() throws SQLException, ClassNotFoundException {
+        return password;
+    }
+    @Override
+    public String getMobileNumber() throws SQLException, ClassNotFoundException {
+        return mobileNumber;
+    }
+    @Override
+    public Status getStatus() throws SQLException, ClassNotFoundException {
+        return status;
+    }
+    @Override
+    public void setUsername(String username) throws SQLException, ClassNotFoundException {
+        UserConnections.setter("username", username, this);
+        this.username = username;
     }
 
     @Override
-    public String getPassword() {
-        return null;
+    public void setEmail(String email) throws SQLException, ClassNotFoundException {
+        UserConnections.setter("email", email, this);
+        this.email = email;
     }
 
     @Override
-    public String getMobileNumber() {
-        return null;
-    }
-
-    @Override
-    public Status getStatus() {
-        return null;
-    }
-
-    @Override
-    public void setUsername(String username) {
-
-    }
-
-    @Override
-    public void setEmail(String email) {
-
-    }
-
-    @Override
-    public void setPassword(String password) {
-
+    public void setPassword(String password) throws SQLException, ClassNotFoundException {
+        UserConnections.setter("pass", password, this);
+        this.password = password;
     }
 
 
     @Override
-    public void setStatus(Status status) {
-
+    public void setStatus(Status status) throws SQLException, ClassNotFoundException {
+        String temp = status.toString();
+        UserConnections.setter("status", temp,this);
+        this.status = status;
     }
 
 
@@ -75,8 +75,18 @@ public class Client extends UserModel implements User {
                 +"'"+mobileNumber+"')";
 
         queryResult = statement.executeUpdate(query);
-
         statement.close();
+
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.mobileNumber = mobileNumber;
+        if(Status.UnVerified.toString().equals(status))
+            this.status = Status.UnVerified;
+        else if(Status.Suspended.toString().equals(status))
+            this.status = Status.Suspended;
+        else
+            this.status = Status.Verified;
 
     }
 

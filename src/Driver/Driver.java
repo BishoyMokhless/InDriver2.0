@@ -16,22 +16,24 @@ public class Driver extends UserModel implements User
     private String nationalID;
     private List<String> favoriteAreas;
     private List<Ride> allRides;
+
+    @Override
     public String getUsername() throws SQLException, ClassNotFoundException {
         return username;
     }
-
+    @Override
     public String getEmail() throws SQLException, ClassNotFoundException {
         return email;
     }
-
+    @Override
     public String getPassword() throws SQLException, ClassNotFoundException {
         return password;
     }
-
+    @Override
     public String getMobileNumber() throws SQLException, ClassNotFoundException {
         return mobileNumber;
     }
-
+    @Override
     public Status getStatus() throws SQLException, ClassNotFoundException {
         return status;
     }
@@ -48,6 +50,7 @@ public class Driver extends UserModel implements User
         return favoriteAreas;
     }
 
+    @Override
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
         UserConnections.setter("username", username, this);
         this.username = username;
