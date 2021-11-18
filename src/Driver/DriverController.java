@@ -8,7 +8,7 @@ import Ride.Ride;
 import Offer.OfferController;
 import connection.RideConnections;
 
-public class DriverController implements DriverServices {
+public class DriverController extends Driver implements DriverServices  {
 
     @Override
     public List<Ride> listAllRides(Driver driver) throws SQLException, ClassNotFoundException {

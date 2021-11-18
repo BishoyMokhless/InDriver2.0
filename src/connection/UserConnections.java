@@ -15,7 +15,7 @@ public class UserConnections implements DataBaseConnect {
         Scanner scanner = new Scanner(System.in);
         int queryResult= 0;
         String type = "";
-        establish_connection();
+        DataBaseConnect.establish_connection();
         if(obj.getClass().getName().equals("Driver"))
             type = "driver";
         else
@@ -33,11 +33,12 @@ public class UserConnections implements DataBaseConnect {
         Scanner scanner = new Scanner(System.in);
         int queryResult= 0;
         String type = "";
-        establish_connection();
-        String query = " insert into favArea (driverName, area) values (?, ?)";
-        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString (1, username);
-        preparedStmt.setString (2, area);
+       Connection c1 = DataBaseConnect.establish_connection();
+        String query = " insert into favArea (area, driverName) values (?, ?)";
+        PreparedStatement preparedStmt = c1.prepareStatement(query);
+        preparedStmt.setString (1, area);
+        preparedStmt.setString (2, username);
+        preparedStmt.executeUpdate();
         establish_connection().close();
     }
 

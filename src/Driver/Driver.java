@@ -90,7 +90,7 @@ public class Driver extends UserModel implements User
         favoriteAreas.add(area);
     }
 
-    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, Status status, List<String> areas) throws SQLException, ClassNotFoundException {
+    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, List<String> areas) throws SQLException, ClassNotFoundException {
         int queryResult= 0;
         String query = "";
         DataBaseConnect.establish_connection();
