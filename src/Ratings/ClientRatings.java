@@ -7,16 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class    ClientRatings implements Ratings {
+public class ClientRatings implements Ratings {
 
     List<Float> driverRates = new ArrayList<Float>();
 
     @Override
-    public float viewRatings( String Client) throws SQLException, ClassNotFoundException {
-
-        return RateConnections.viewClientsRate(Client);
-
+    public List<Float> viewRatings(String username) throws SQLException, ClassNotFoundException {
+        driverRates = RateConnections.viewDriverRate(username);
+        return driverRates;
     }
-    public void addRate(String clientName,String driver,int rating){
+    public void addRate(String clientName,String driverName,int rating) throws SQLException, ClassNotFoundException {
+        RateConnections.addRate(clientName, driverName, rating);
     }
 }

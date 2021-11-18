@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface Ratings
 {
-       public void viewRatings(List<Float> ratings) throws SQLException, ClassNotFoundException;
+       public List<Float> viewRatings(String username) throws SQLException, ClassNotFoundException;
 }
