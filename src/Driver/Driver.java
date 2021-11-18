@@ -20,133 +20,105 @@ public class Driver extends userData implements User
     private String nationalID;
     private String favoriteAreas;
 
-    private ResultSet getter() throws SQLException, ClassNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        int queryResult= 0;
-        String query = "";
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        Statement statement = C1.establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select * from driver Where username = '" + username + "'");
-        rs.next();
-        return rs;
-    }
-    private void setter(String column , String rowData) throws SQLException, ClassNotFoundException
-    {
-        Scanner scanner = new Scanner(System.in);
-        int queryResult= 0;
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        String query = "update driver set " + column + " = ?";
-        PreparedStatement preparedStmt = C1.establish_connection().prepareStatement(query);
-        preparedStmt.setString(1, rowData);
-        preparedStmt.executeUpdate();
-        C1.establish_connection().close();
-    }
-
     public String getUsername() throws SQLException, ClassNotFoundException {
-        username = getter().getString("username");
         return username;
     }
 
     public String getEmail() throws SQLException, ClassNotFoundException {
-        email = getter().getString("email");
         return email;
     }
 
     public String getPassword() throws SQLException, ClassNotFoundException {
-        password = getter().getString("pass");
         return password;
     }
 
     public String getMobileNumber() throws SQLException, ClassNotFoundException {
-        mobileNumber = getter().getString("mobileNumber");
         return mobileNumber;
     }
 
     public Status getStatus() throws SQLException, ClassNotFoundException {
-        String data = getter().getString("status");
-        if(Status.UnVerified.toString().equals(data))
-            status = Status.Verified;
-        else if(Status.Suspended.toString().equals(data))
-            status = Status.Verified;
-        else
-            status = Status.Verified;
         return status;
     }
 
     public String getDrivingLicense() throws SQLException, ClassNotFoundException {
-        drivingLicense = getter().getString("drive_license");
         return drivingLicense;
     }
 
     public String getNationalID() throws SQLException, ClassNotFoundException {
-       nationalID = getter().getString("nationalID");
         return nationalID;
     }
 
     public String getFavoriteAreas() throws SQLException, ClassNotFoundException {
-        favoriteAreas = getter().getString("favarea");
         return favoriteAreas;
     }
 
     public void setUsername(String username) throws SQLException, ClassNotFoundException {
-        setter("username", username);
+        Connect.setter("username", username, this);
         this.username = username;
     }
 
     @Override
     public void setEmail(String email) throws SQLException, ClassNotFoundException {
-        setter("email", email);
+        Connect.setter("email", email, this);
         this.email = email;
     }
 
     @Override
     public void setPassword(String password) throws SQLException, ClassNotFoundException {
-        setter("pass", password);
+        Connect.setter("pass", password, this);
         this.password = password;
     }
 
     @Override
     public void setStatus(Status status) throws SQLException, ClassNotFoundException {
         String temp = status.toString();
-        setter("status", temp);
+        Connect.setter("status", temp,this);
         this.status = status;
     }
 
     public void setDrivingLicense(String drivingLicense) throws SQLException, ClassNotFoundException {
-        setter("drive_license", drivingLicense);
+        Connect.setter("drive_license", drivingLicense, this);
         this.drivingLicense = drivingLicense;
     }
 
     public void setNationalID(String nationalID) throws SQLException, ClassNotFoundException {
-        setter("nationalID", nationalID);
+        Connect.setter("nationalID", nationalID, this);
         this.nationalID = nationalID;
     }
 
     public void setFavoriteAreas(String favoriteAreas) throws SQLException, ClassNotFoundException {
-        setter("favarea", favoriteAreas);
+        Connect.setter("favarea", favoriteAreas, this);
         this.favoriteAreas = favoriteAreas;
     }
-
-    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID ) throws SQLException, ClassNotFoundException {
+    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, Status status ) throws SQLException, ClassNotFoundException {
         int queryResult= 0;
         String query = "";
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        Statement statement = C1.establish_connection().createStatement();
+        Connect.establish_connection();
+        Statement statement = Connect.establish_connection().createStatement();
 
         //push in database
-
         query = "INSERT INTO driver(username,email,pass,nationalID,drive_license," +
-                "mobileNumber) VALUES ("
+                "mobileNumber,status) VALUES ("
                 +"'"+username+"',"
                 +"'"+email+"',"
                 +"'"+password+"',"
-                +"'"+mobileNumber+"')";
-
+                +"'"+nationalID+"',"
+                +"'"+drivingLicense+"',"
+                +"'"+mobileNumber+"',"
+                +"'"+status+"')";
         queryResult = statement.executeUpdate(query);
-
         statement.close();
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.mobileNumber = mobileNumber;
+        this.drivingLicense = drivingLicense;
+        this.nationalID = nationalID;
+        if(Status.UnVerified.toString().equals(status))
+            this.status = Status.UnVerified;
+        else if(Status.Suspended.toString().equals(status))
+            this.status = Status.Suspended;
+        else
+            this.status = Status.Verified;
     }
 }

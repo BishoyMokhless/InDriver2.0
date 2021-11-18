@@ -41,6 +41,7 @@ public interface User {
                else
                     System.out.println("username or password is incorrect");
           }
+
           statement.close();
      }
  }

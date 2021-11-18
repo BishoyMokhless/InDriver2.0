@@ -4,14 +4,14 @@ import Ratings.Ratings;
 import User.User;
 import User.Status;
 import connection.Connect;
-
+import User.userData;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class Client implements User {
+public class Client extends userData implements User {
 
 
     public String getUsername()

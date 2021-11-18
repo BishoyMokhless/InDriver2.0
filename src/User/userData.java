@@ -4,7 +4,7 @@ import Ratings.Ratings;
 
 import java.util.List;
 
-public class userData {
+abstract public class userData {
     public String username;
     public String email;
     public String password;
