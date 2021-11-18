@@ -8,5 +8,5 @@ public interface ClientServices  {
 
     Client client = new Client();
 
-    public void RequestRide(int client_id,int driver_id ,String Destination, String Source, float price) throws SQLException, ClassNotFoundException;
+    public void RequestRide(String clientName, String sorce, String destination) throws SQLException, ClassNotFoundException;
 }

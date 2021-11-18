@@ -1,39 +1,32 @@
 package Driver;
 
+import Offer.Offer;
+import Offer.Offer;
+import Ride.Ride;
 import connection.Connect;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
+import Ride.RequestedRide;
 public class DriverController implements DriverServices {
 
-    public String listAllRides(String username) throws SQLException, ClassNotFoundException
-    {
-        Scanner scanner = new Scanner(System.in);
-        int queryResult= 0, i = 0;
-        String result = "";
-        Connect C1 = new Connect();
-        C1.establish_connection();
-        Statement statement = C1.establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select * from rides Where driver = '" + username + "'");
-        while(rs.next())
-        {
-            result += "Ride no. " + i;
-            result += "driver: " + rs.getString("driver") + "\n";
-            result += "client: " + rs.getString("client") + "\n";
-            result += "driver: " + rs.getString("price") + "\n";
-            result += "source: " + rs.getString("source") + "\n";
-            result += "destination: " + rs.getString("destination") + "\n";
-            i++;
-        }
-        return result;
+    public List<RequestedRide> listAllRides(Driver driver) throws SQLException, ClassNotFoundException {
+        List<RequestedRide> reqRides = new ArrayList<RequestedRide>();
+        Connect.listAllRides(driver.getFavoriteAreas());
+
     }
 
     @Override
-    public float suggestRidePrice() {
-        return 0;
+    public Offer suggestRidePrice(OfferController offer)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter your price");
+        float price = input.nextFloat();
+        offer.
     }
 
     @Override

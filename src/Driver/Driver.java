@@ -1,4 +1,5 @@
 package Driver;
+import Ride.Ride;
 import User.User;
 import User.Status;
 import connection.Connect;
@@ -6,13 +7,14 @@ import User.UserModel;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class Driver extends UserModel implements User
 {
     private String drivingLicense;
     private String nationalID;
-    private String favoriteAreas;
-
+    private List<String> favoriteAreas;
+    private List<Ride> allRides;
     public String getUsername() throws SQLException, ClassNotFoundException {
         return username;
     }
@@ -41,7 +43,7 @@ public class Driver extends UserModel implements User
         return nationalID;
     }
 
-    public String getFavoriteAreas() throws SQLException, ClassNotFoundException {
+    public List<String> getFavoriteAreas() throws SQLException, ClassNotFoundException {
         return favoriteAreas;
     }
 
@@ -79,16 +81,21 @@ public class Driver extends UserModel implements User
         this.nationalID = nationalID;
     }
 
-    public void setFavoriteAreas(String favoriteAreas) throws SQLException, ClassNotFoundException {
-        Connect.setter("favarea", favoriteAreas, this);
-        this.favoriteAreas = favoriteAreas;
+    public void setFavoriteAreas(String area) throws SQLException, ClassNotFoundException {
+        Connect.setFavorite(username, area);
+        favoriteAreas.add(area);
     }
-    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, Status status ) throws SQLException, ClassNotFoundException {
+
+    public void registerDriver(String username, String email, String password, String mobileNumber,String drivingLicense, String nationalID, Status status, List<String> areas) throws SQLException, ClassNotFoundException {
         int queryResult= 0;
         String query = "";
         Connect.establish_connection();
         Statement statement = Connect.establish_connection().createStatement();
-
+        favoriteAreas = areas;
+        for(int i = 0; i < areas.size(); i++)
+        {
+            Connect.setFavorite(username, areas.get(i));
+        }
         //push in database
         query = "INSERT INTO driver(username,email,pass,nationalID,drive_license," +
                 "mobileNumber,status) VALUES ("
@@ -113,5 +120,13 @@ public class Driver extends UserModel implements User
             this.status = Status.Suspended;
         else
             this.status = Status.Verified;
+    }
+
+    public List<Ride> getAllRides() {
+        return allRides;
+    }
+
+    public void setAllRides(List<Ride> allRides) {
+        this.allRides = allRides;
     }
 }

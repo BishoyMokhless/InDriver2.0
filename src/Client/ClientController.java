@@ -1,21 +1,20 @@
 package Client;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 import Offer.Offer;
 import Offer.OfferController;
+import connection.Connect;
+
 public class ClientController implements  ClientServices {
 
     Offer offer = new OfferController();
 
     @Override
-    public void RequestRide(int client_id,int driver_id ,String Destination, String Source, float price) throws SQLException, ClassNotFoundException {
-
-        offer.sendOffer(client_id,driver_id,price,Source,Destination);
-
-
+    public void RequestRide(String clientName, String source, String destination) throws SQLException, ClassNotFoundException
+    {
+        Connect.RequestRide(clientName, source, destination);
     }
-
-
 }
