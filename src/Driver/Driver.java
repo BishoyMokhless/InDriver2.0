@@ -2,19 +2,12 @@ package Driver;
 import User.User;
 import User.Status;
 import connection.Connect;
-import Ratings.Ratings;
-import User.User;
-import User.Status;
-import User.userData;
-import connection.Connect;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import User.UserModel;
+
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Scanner;
 
-public class Driver extends userData implements User
+public class Driver extends UserModel implements User
 {
     private String drivingLicense;
     private String nationalID;

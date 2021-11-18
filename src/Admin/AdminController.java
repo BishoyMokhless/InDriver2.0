@@ -3,18 +3,16 @@ package Admin;
 import Driver.Driver;
 import User.Status;
 import User.User;
+import Admin.AdminModel;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminController implements AdminServices {
+public class AdminController extends AdminModel implements AdminServices {
 
 
-    @Override
-    public List<Driver> getDrivers() {
-        return drivers;
-    }
+
 
     @Override
     public void verifyDriverRegistration(Driver driver) throws SQLException, ClassNotFoundException {

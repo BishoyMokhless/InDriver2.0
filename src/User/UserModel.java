@@ -4,7 +4,7 @@ import Ratings.Ratings;
 
 import java.util.List;
 
-abstract public class userData {
+abstract public class UserModel {
     public String username;
     public String email;
     public String password;
@@ -12,7 +12,7 @@ abstract public class userData {
     public Status status;
     public List<Ratings> ratings;
 
-    public userData()
+    public UserModel()
     {
         username = "";
         email = "";
