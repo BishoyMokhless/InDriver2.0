@@ -19,4 +19,14 @@ public class ClientRatings implements Ratings {
     public void addRate(String clientName,String driverName,int rating) throws SQLException, ClassNotFoundException {
         RateConnections.addRate(clientName, driverName, rating);
     }
+
+    public Float viewAvg(String clientName) throws SQLException, ClassNotFoundException {
+        driverRates = viewRatings(clientName);
+        float sum = 0;
+        for(int i = 0; i < driverRates.size(); i++)
+        {
+            sum += driverRates.get(i);
+        }
+        return sum / driverRates.size();
+    }
 }
