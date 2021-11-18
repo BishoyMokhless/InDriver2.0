@@ -24,12 +24,17 @@ public class RateConnections implements DataBaseConnect{
         preparedStmt.executeUpdate();
     };
 
-    public float viewClientsRate(String Client)
-    {
+    public static float viewClientsRate(String Client) throws SQLException, ClassNotFoundException {
 
-        ResultSet rs = stmt.executeQuery("select avg(T_TEMP) from TRAILTRACKER");
+        DataBaseConnect.establish_connection();
+        String query="select avg(rate) from rate where clientName = ?  ";
+        PreparedStatement preparedStmt = DataBaseConnect.establish_connection().prepareStatement(query);
+        preparedStmt.setString(1, Client);
+        ResultSet rs = preparedStmt.executeQuery();
         if(rs.next())
-            System.out.println("avg temp is " + rs.getFloat(1));
+           return  rs.getFloat("rate");
+        else
+            return  0;
 
     };
     public List<Ratings> viewDriverRate(List<Float> ratings)
