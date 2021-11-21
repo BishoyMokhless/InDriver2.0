@@ -13,8 +13,8 @@ import java.util.List;
 
 public class RateConnections implements DataBaseConnect{
 
-    public static void addRate(String clientName, String driverName,int rate) throws SQLException, ClassNotFoundException {
-
+    public static void addRate(String clientName, String driverName,int rate) throws SQLException, ClassNotFoundException 
+    {
         DataBaseConnect.establish_connection();
         String query="INSERT INTO rate (clientName, driverName, rate)"+" VALUES(?, ?, ? ) ";
         PreparedStatement preparedStmt = DataBaseConnect.establish_connection().prepareStatement(query);

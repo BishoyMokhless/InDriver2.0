@@ -10,6 +10,7 @@ import User.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class consoleApp {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
@@ -20,27 +21,30 @@ public class consoleApp {
         d.setNationalID("12345678912345");
         d.setFavoriteAreas("cairo");
         d.setPassword("111");*/
+
         List<String> fav = new ArrayList<String>();
-        List<OfferController> offers = new ArrayList<OfferController>();
+
         fav.add("cairo");
         fav.add("bsaten");
         fav.add("helwan");
+        List<Ride> rides = new ArrayList<Ride>();
+        d.registerDriver("fqq1e","8811qqqef","ffqqef","f11qqqef","feqq","fffqqq",fav);
+        ClientController c = new ClientController();
+        c.registerClient("ffqqf","ffqqq1f","ffqqqff","fffqqqds");
+        OfferController o = new OfferController();
+        c.RequestRide("ffqqf", "helwan", "bsaten");
+        rides = d.listAllRides();
+        for(int i = 0; i < rides.size(); i++)
+        {
+            System.out.println(rides.get(i));
+        }
+        Scanner input = new Scanner(System.in);
+        System.out.println("enter the index: ");
+        int index = input.nextInt();
+        OfferController offer = new OfferController();
+        offer = d.suggestRidePrice(index);
+        c.acceptOffers(offer);
 
-
-       d.registerDriver("amm","amm","119","1110kk","amm100p","amm44",fav);
-       ClientController c = new ClientController();
-       c.registerClient("cll","cll","os9ama","po19798");
-       OfferController o = new OfferController();
-       c.RequestRide("cll", "helwan", "bsaten");
-       offers = d.suggestRidePrice();
-       o.setDriver(d.getUsername());
-       o.setClient("cll");
-       o.setSource("helwan");
-       o.setDestination("bsaten");
-       o.setPrice(150);
-       o.setAccepted(false);
-       o.sendOffer(o);
-       c.acceptOffers(o);
-
+       // c.acceptOffers(o);
     }
 }

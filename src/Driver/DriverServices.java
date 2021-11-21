@@ -10,8 +10,8 @@ public interface DriverServices {
     Driver driver = new Driver();
     Offer offer = null;
 
-    public List<Ride> listAllRides(Driver driver) throws SQLException, ClassNotFoundException;
-    public List<OfferController> suggestRidePrice(OfferController offer) throws SQLException, ClassNotFoundException;
+    public List<Ride> listAllRides() throws SQLException, ClassNotFoundException;
+    public OfferController suggestRidePrice(int index) throws SQLException, ClassNotFoundException;
     public void FavAreas(String area) throws SQLException, ClassNotFoundException;
 
 

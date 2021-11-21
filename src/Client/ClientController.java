@@ -6,7 +6,7 @@ import Offer.OfferController;
 import connection.OfferConnections;
 import connection.RideConnections;
 
-public class ClientController implements  ClientServices {
+public class ClientController extends Client implements  ClientServices {
 
     @Override
     public void RequestRide(String clientName, String source, String destination) throws SQLException, ClassNotFoundException

@@ -4,18 +4,25 @@ import Ride.Ride;
 import User.User;
 import User.Status;
 import connection.DataBaseConnect;
+import connection.OfferConnections;
 import connection.UserConnections;
 import User.UserModel;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+import Offer.Offer;
+import Offer.OfferController;
+import Ride.Ride;
+
 
 public class Driver extends UserModel implements User
 {
     private String drivingLicense;
     private String nationalID;
-    private List<String> favoriteAreas;
-    private List<Ride> allRides;
+    private List<String> favoriteAreas = new ArrayList<String>();
+    private List<Ride> allRides = new ArrayList<Ride>();
+    Offer offer = new OfferController();
 
     @Override
     public String getUsername() throws SQLException, ClassNotFoundException {
@@ -37,7 +44,6 @@ public class Driver extends UserModel implements User
     public Status getStatus() throws SQLException, ClassNotFoundException {
         return status;
     }
-
     public String getDrivingLicense() throws SQLException, ClassNotFoundException {
         return drivingLicense;
     }
@@ -95,11 +101,9 @@ public class Driver extends UserModel implements User
         String query = "";
         DataBaseConnect.establish_connection();
         Statement statement = DataBaseConnect.establish_connection().createStatement();
+        //System.out.println(areas.size());
 
-        for(int i = 0; i < areas.size(); i++)
-        {
-            UserConnections.setFavorite(username, areas.get(i));
-        }
+
         //push in database
         query = "INSERT INTO driver(username,email,pass,nationalID,drive_license," +
                 "mobileNumber,status) VALUES ("
@@ -109,22 +113,20 @@ public class Driver extends UserModel implements User
                 +"'"+nationalID+"',"
                 +"'"+drivingLicense+"',"
                 +"'"+mobileNumber+"',"
-                +"'"+status+"')";
+                +"'UnVerified')";
         queryResult = statement.executeUpdate(query);
         statement.close();
+        for(int i = 0; i < areas.size(); i++) {
+            UserConnections.setFavorite(username, areas.get(i));
+        }
         this.username = username;
         this.email = email;
         this.password = password;
         this.mobileNumber = mobileNumber;
         this.drivingLicense = drivingLicense;
         this.nationalID = nationalID;
-        this.favoriteAreas = areas;
-        if(Status.UnVerified.toString().equals(status))
-            this.status = Status.UnVerified;
-        else if(Status.Suspended.toString().equals(status))
-            this.status = Status.Suspended;
-        else
-            this.status = Status.Verified;
+        this.favoriteAreas.addAll(areas);
+        this.status = Status.UnVerified;
     }
 
     public List<Ride> getAllRides() {
