@@ -4,17 +4,12 @@ import Ride.Ride;
 import User.User;
 import User.Status;
 import connection.DataBaseConnect;
-import connection.OfferConnections;
 import connection.UserConnections;
 import User.UserModel;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import Offer.Offer;
-import Offer.OfferController;
-import Ride.Ride;
-
 
 public class Driver extends UserModel implements User
 {
@@ -22,7 +17,6 @@ public class Driver extends UserModel implements User
     private String nationalID;
     private List<String> favoriteAreas = new ArrayList<String>();
     private List<Ride> allRides = new ArrayList<Ride>();
-    Offer offer = new OfferController();
 
     @Override
     public String getUsername() throws SQLException, ClassNotFoundException {

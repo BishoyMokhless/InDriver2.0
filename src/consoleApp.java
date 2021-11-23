@@ -1,12 +1,7 @@
-import Admin.*;
 import Client.*;
-import connection.*;
 import Driver.*;
 import Offer.*;
-import Ratings.*;
 import Ride.*;
-import User.*;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,36 +10,51 @@ import java.util.Scanner;
 public class consoleApp {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         DriverController d=new DriverController();
-        /*d.setUsername("fouad12");
-        d.setEmail("fouad@123");
-        d.setDrivingLicense("12345678912345");
-        d.setNationalID("12345678912345");
-        d.setFavoriteAreas("cairo");
-        d.setPassword("111");*/
-
         List<String> fav = new ArrayList<String>();
+        List<Ride> rides = new ArrayList<Ride>();
+        List<Offer> offers = new ArrayList<Offer>();
 
         fav.add("cairo");
         fav.add("bsaten");
         fav.add("helwan");
-        List<Ride> rides = new ArrayList<Ride>();
-        d.registerDriver("fqq1e","8811qqqef","ffqqef","f11qqqef","feqq","fffqqq",fav);
+        d.registerDriver("fouad1s","fff1s","fff1s","fff1sf","ffs1f","fffs1",fav);
+
+
         ClientController c = new ClientController();
-        c.registerClient("ffqqf","ffqqq1f","ffqqqff","fffqqqds");
-        OfferController o = new OfferController();
-        c.RequestRide("ffqqf", "helwan", "bsaten");
+        c.registerClient("hassasn1","hhhsh","hhsh1","hhhhs1");
+
+        // client Request Ride
+        c.RequestRide("hassasn1", "helwan", "bsaten");
+
+        //view all rides for the driver
+        System.out.println("The requested rides for your favAreas");
         rides = d.listAllRides();
         for(int i = 0; i < rides.size(); i++)
         {
             System.out.println(rides.get(i));
         }
+
+        //take the index and price of ride that driver want to set offer to it
         Scanner input = new Scanner(System.in);
         System.out.println("enter the index: ");
         int index = input.nextInt();
-        OfferController offer = new OfferController();
-        offer = d.suggestRidePrice(index);
-        c.acceptOffers(offer);
+        System.out.println("enter the price: ");
+        int price = input.nextInt();
 
-       // c.acceptOffers(o);
+        //driver suggest offer for chosen ride
+        d.suggestRidePrice(rides.get(index), price);
+
+        //viewing offers to the client
+        offers = c.viewOffers();
+
+        for(int i = 0; i < offers.size(); i++)
+        {
+            System.out.println(offers.get(i));
+        }
+
+        //take index of the offer that user want to accept
+        System.out.println("enter the index of offer you want to accept: ");
+        index = input.nextInt();
+        c.acceptOffer(offers.get(index));
     }
 }

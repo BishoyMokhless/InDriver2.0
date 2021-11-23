@@ -83,7 +83,11 @@ public class Client extends UserModel implements User {
                 +"'Unverified')";
 
         queryResult = statement.executeUpdate(query);
-
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.mobileNumber = mobileNumber;
+        this.status = Status.UnVerified;
         statement.close();
 
     }

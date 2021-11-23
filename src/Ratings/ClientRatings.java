@@ -1,8 +1,6 @@
 package Ratings;
 
-import Client.Client;
 import connection.RateConnections;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

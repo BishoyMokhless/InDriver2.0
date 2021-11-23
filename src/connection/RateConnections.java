@@ -1,9 +1,5 @@
 package connection;
 
-import Client.Client;
-import Ratings.Ratings;
-import Ride.Ride;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
