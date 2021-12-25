@@ -12,7 +12,7 @@ import java.util.List;
 public interface ClientService {
 
     Client client = new Client();
-    public void RequestRide(String clientName, String source, String destination) throws SQLException, ClassNotFoundException;
+    public void RequestRide(@RequestBody String req) throws SQLException, ClassNotFoundException;
 
 
 }

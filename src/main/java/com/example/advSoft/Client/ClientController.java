@@ -9,6 +9,8 @@ package com.example.advSoft.Client;
 import org.springframework.web.bind.annotation.*;
 
  import java.sql.*;
+ import java.util.ArrayList;
+ import java.util.List;
 
  import static com.example.advSoft.connection.DataBaseConnect.establish_connection;
 
@@ -89,8 +91,120 @@ public class ClientController  extends Client implements  ClientService , User {
         return arr.toString();
     }
 
+    @RequestMapping("RequestRide")
     @Override
-    public void RequestRide(String clientName, String source, String destination) throws SQLException, ClassNotFoundException {
+    @PostMapping
+    public void RequestRide(@RequestBody String req) throws SQLException, ClassNotFoundException {
+
+        JSONObject jsonObject = new JSONObject(req);
+        Integer clientsNumber =Integer.parseInt((String) jsonObject.get("clients_number"));
+        Connection c1 = establish_connection();
+        String query = " insert into requestedrides (clientName,source,destination,accepted,clients_number) values (?,?,?,?,?)";
+        PreparedStatement preparedStmt = c1.prepareStatement(query);
+        preparedStmt.setString (1, (String) jsonObject.get("ClientName"));
+        preparedStmt.setString (2, (String) jsonObject.get("source"));
+        preparedStmt.setString (3, (String) jsonObject.get("destination"));
+        preparedStmt.setInt (4, 0);
+        preparedStmt.setInt (5, clientsNumber);
+         preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("onr request created");
 
     }
+
+    @RequestMapping("viewOffers/{ClientName}")
+    @GetMapping
+    public String viewOffers(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException {
+
+        Connection c1 = establish_connection();
+        JSONArray arrOffers = new JSONArray();
+        List<String> Ids = new ArrayList<String>();
+        JSONArray arr = new JSONArray();
+
+
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select id from requestedrides where  clientName='"+ClientName+"' and  accepted=0 ");
+        while(rs.next())
+        {
+            Ids.add(rs.getString("id"));
+        }
+
+
+       for (int i =0;i<Ids.size();i++)
+       {
+           rs = statement.executeQuery("select *  from offer where ReqRID='"+Ids.get(i)+"' and  accepted=0 ");
+           while(rs.next())
+           {
+               JSONObject jsonObject = new JSONObject();
+               jsonObject.put("driverName",rs.getString("driverName"));
+               jsonObject.put("id",rs.getString("id"));
+               jsonObject.put("ReqRID",rs.getString("ReqRID"));
+               jsonObject.put("offerTime",rs.getString("offerTime"));
+               jsonObject.put("price",rs.getString("price"));
+               arr.put(jsonObject);
+           }
+       }
+        return arr.toString();
+
+
+    }
+
+    @RequestMapping("acceptOffer/{id}")
+    @PostMapping
+    public void acceptOffer(@PathVariable("id") String id) throws SQLException, ClassNotFoundException {
+
+         JSONArray arrOffers = new JSONArray();
+         JSONArray arr = new JSONArray();
+        List<String> Ids = new ArrayList<String>();
+        Connection c1 = establish_connection();
+        String query = "update offer set accepted=1 where id ="+id+" ";
+        PreparedStatement preparedStmt = c1.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+
+
+        String reqId="";
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select * from offer where  id='"+id+"'");
+        while(rs.next())
+        {
+            reqId=rs.getString("ReqRID");
+        }
+
+        query = "update requestedrides set accepted=1 where id ="+reqId+" ";
+        preparedStmt = c1.prepareStatement(query);
+        preparedStmt.executeUpdate();
+
+
+
+
+
+         c1 = establish_connection();
+         query = " insert into ride (offer_id) values (?)";
+         preparedStmt = c1.prepareStatement(query);
+        preparedStmt.setString (1, id);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("onr accepted Offer ");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
 }
