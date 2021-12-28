@@ -1,7 +1,7 @@
 package com.example.advSoft.Driver;
 
 import com.example.advSoft.User.UserModel;
-
+import com.example.advSoft.User.User;
 public class Driver extends UserModel {
     public  String drive_license;
     public  String nationalID;
