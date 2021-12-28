@@ -1,5 +1,6 @@
 package com.example.advSoft.Client;
 
+ import com.example.advSoft.Discount.*;
  import com.example.advSoft.User.User;
  import org.json.JSONArray;
  import org.json.JSONObject;
@@ -16,11 +17,10 @@ public class ClientController  extends Client implements  ClientService , User {
     @Autowired
     @Override
     @GetMapping
+
     public String getAll() throws SQLException, ClassNotFoundException {
         Connection c1 = establish_connection();
-
         JSONArray arr = new JSONArray();
-
         Statement statement = establish_connection().createStatement();
         ResultSet rs = statement.executeQuery("select *  from client ");
         while(rs.next())
@@ -90,7 +90,7 @@ public class ClientController  extends Client implements  ClientService , User {
         preparedStmt.setString (3, (String) jsonObject.get("destination"));
         preparedStmt.setInt (4, 0);
         preparedStmt.setInt (5, clientsNumber);
-         preparedStmt.executeUpdate();
+        preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("onr request created");
     }
@@ -153,5 +153,27 @@ public class ClientController  extends Client implements  ClientService , User {
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("onr accepted Offer ");
+    }
+
+    @RequestMapping("checkDiscount/{ClientName}")
+    @GetMapping
+    public String checkDiscount(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException
+    {
+        JSONArray arrDiscounts = new JSONArray();
+        List<Double> discounts = new ArrayList<Double>();
+        JSONArray arr = new JSONArray();
+        Discount discount = new BirthdayDiscount();
+        discounts.add(discount.getDiscount(ClientName));
+        discount = new NclientsDiscount();
+        discounts.add(discount.getDiscount(ClientName));
+        discount = new AreaDiscount();
+        discounts.add(discount.getDiscount(ClientName));
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Birthday Discount", discounts.get(0));
+        jsonObject.put("Nclients Discount", discounts.get(1));
+        jsonObject.put("Area Discount", discounts.get(2));
+        arr.put(jsonObject);
+        return arr.toString();
     }
 }

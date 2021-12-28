@@ -12,5 +12,6 @@ public interface AdminServices {
     public String listPendingDrivers() throws SQLException, ClassNotFoundException;
     public void suspendAccountClient(@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
     public void suspendAccountDriver(@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
+    public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException;
 
 }

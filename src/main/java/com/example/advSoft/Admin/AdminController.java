@@ -70,4 +70,22 @@ public class AdminController  extends Admin implements AdminServices {
         establish_connection().close();
         System.out.println("one Client suspended");
     }
+
+    @RequestMapping("setDiscountArea")
+    @Override
+    @PostMapping
+    public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException {
+        System.out.println(areas);
+        Connection c1 = establish_connection();
+        JSONArray jsonArray = new JSONArray(areas);
+        for (Object jsonOb : jsonArray)
+        {
+            Statement statement = establish_connection().createStatement();
+            String query = " insert into DiscountAreas (area) values (?)";
+            PreparedStatement preparedStmt = c1.prepareStatement(query);
+            preparedStmt.setString (1, (String) jsonOb);
+            preparedStmt.executeUpdate();
+        }
+        System.out.println("areas added");
+    }
 }
