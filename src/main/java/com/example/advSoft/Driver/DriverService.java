@@ -1,20 +1,13 @@
 package com.example.advSoft.Driver;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.sql.SQLException;
-import java.util.List;
-
 
 public interface DriverService {
 
-    //public List<Ride> listAllRides() throws SQLException, ClassNotFoundException;
-    //public void suggestRidePrice(Ride ride, float price) throws SQLException, ClassNotFoundException;
-    //public void FavAreas(String area) throws SQLException, ClassNotFoundException;
-    //public void sendOffer(Offer offer) throws SQLException, ClassNotFoundException;
-
-
+    public String listAllRequestedRides(@PathVariable("DriverName") String DriverName) throws SQLException, ClassNotFoundException;
+    public String listAllRides(@PathVariable("username") String drivername) throws SQLException, ClassNotFoundException;
+    public void FavAreas( @RequestBody String area ,@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
+    public void sendOffer(@PathVariable("id") int id, @RequestBody  String req) throws SQLException, ClassNotFoundException ;
 }
