@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -55,7 +57,7 @@ public class DriverController extends Driver implements DriverService , User {
         preparedStmt.setString (7, "UnVerified");
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("onr driver created");
+        System.out.println("one driver created");
     }
 
 
@@ -70,7 +72,6 @@ public class DriverController extends Driver implements DriverService , User {
         ResultSet rs = statement.executeQuery("select *  from driver where username='"+ (String) jsonObject.get("username") +"' and pass='"+ (String) jsonObject.get("pass") + "'" );
         while(rs.next())
         {
-            System.out.println("in login");
             JSONObject newjsonObject = new JSONObject();
             newjsonObject.put("username",rs.getString("username"));
             newjsonObject.put("email",rs.getString("email"));
@@ -162,18 +163,61 @@ public class DriverController extends Driver implements DriverService , User {
     @Override
     @PostMapping
     public void sendOffer(@PathVariable("id") int id,@RequestBody  String req) throws SQLException, ClassNotFoundException {
+        boolean inRide = false;
         JSONObject jsonObject = new JSONObject(req);
-        System.out.println(id);
-        Float price =Float.parseFloat((String) jsonObject.get("price"));
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select *  from offer where driverName='"+jsonObject.get("driverName") + "' and TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP, offerTime) <= 1440 and accepted = 1 ");
+        while(rs.next())
+        {
+            Statement statement2 = establish_connection().createStatement();
+            ResultSet rs2 = statement2.executeQuery("select *  from ride where offer_id='"+rs.getInt("id") + "' and arrive_destination_time IS NULL ");
+            if(rs2.next())
+            {
+                System.out.println("You can't send offer while you are in a trip");
+                inRide = true;
+                break;
+            }
+        }
+        if(!inRide)
+        {
+            //float price = Float.parseFloat((String) jsonObject.get("price"));
+            float price = BigDecimal.valueOf(jsonObject.getDouble("price")).floatValue();
+            Connection c1 = establish_connection();
+            String query = " insert into offer (driverName,ReqRID,price,accepted) values (?,?,?,?)";
+            PreparedStatement preparedStmt = c1.prepareStatement(query);
+            preparedStmt.setString(1, (String) jsonObject.get("driverName"));
+            preparedStmt.setInt(2, id);
+            preparedStmt.setFloat(3, price);
+            preparedStmt.setInt(4, 0);
+            preparedStmt.executeUpdate();
+            establish_connection().close();
+            System.out.println("one offer created");
+        }
+    }
+
+    @RequestMapping("startTrip/{id}")
+    @Override
+    @PostMapping
+    public void startTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
+    {
         Connection c1 = establish_connection();
-        String query = " insert into offer (driverName,ReqRID,price,accepted) values (?,?,?,?)";
+        String query = "update ride set arrive_source_time = CURRENT_TIMESTAMP where id = '" + id + "'";
         PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.setString (1, (String) jsonObject.get("driverName"));
-        preparedStmt.setInt (2, id);
-        preparedStmt.setFloat (3,  price);
-        preparedStmt.setInt (4,0 );
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("onr offer created");
+        System.out.println("the trip is started");
+    }
+
+    @RequestMapping("endTrip/{id}")
+    @Override
+    @PostMapping
+    public void endTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
+    {
+        Connection c1 = establish_connection();
+        String query = "update ride set arrive_destination_time = CURRENT_TIMESTAMP where id = '" + id + "'";
+        PreparedStatement preparedStmt = c1.prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("the trip is ended");
     }
 }

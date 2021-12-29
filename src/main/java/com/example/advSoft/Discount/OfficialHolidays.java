@@ -16,7 +16,7 @@ public class OfficialHolidays implements Discount{
         Connection c1 = establish_connection();
         JSONArray arr = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from officialHolidays where date = CURDATE()");
+        ResultSet rs = statement.executeQuery("select *  from officialHoliday where date = CURDATE()");
         if(rs.next())
         {
             String holiday = rs.getString("holidayName");

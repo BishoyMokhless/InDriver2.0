@@ -152,7 +152,7 @@ public class ClientController  extends Client implements  ClientService , User {
         preparedStmt.setString (1, id);
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("onr accepted Offer ");
+        System.out.println("one accepted Offer ");
     }
 
     @RequestMapping("checkDiscount/{ClientName}")
@@ -168,11 +168,14 @@ public class ClientController  extends Client implements  ClientService , User {
         discounts.add(discount.getDiscount(ClientName));
         discount = new AreaDiscount();
         discounts.add(discount.getDiscount(ClientName));
+        discount = new FirstRideDiscount();
+        discounts.add(discount.getDiscount(ClientName));
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("Birthday Discount", discounts.get(0));
         jsonObject.put("Nclients Discount", discounts.get(1));
         jsonObject.put("Area Discount", discounts.get(2));
+        jsonObject.put("First time Discount", discounts.get(3));
         arr.put(jsonObject);
         return arr.toString();
     }
