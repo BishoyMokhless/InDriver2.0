@@ -12,8 +12,7 @@ import java.sql.SQLException;
 @RestController
 public class AdvancedSoftwareProjectApplication {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
-		Discount obj  = new BirthdayDiscount();
-		obj.getDiscount("ffff");
+
 		SpringApplication.run(AdvancedSoftwareProjectApplication.class, args);
 	}
 }

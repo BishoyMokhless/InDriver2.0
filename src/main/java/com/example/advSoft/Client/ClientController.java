@@ -41,13 +41,14 @@ public class ClientController  extends Client implements  ClientService , User {
     public void register( @RequestBody String person) throws SQLException, ClassNotFoundException, SQLException {
         JSONObject jsonObject = new JSONObject(person);
         Connection c1 = establish_connection();
-        String query = " insert into client (username,email,pass,mobileNumber,status) values (?,?,?,?,?)";
+        String query = " insert into client (username,email,pass,mobileNumber,status,birthdate) values (?,?,?,?,?,?)";
         PreparedStatement preparedStmt = c1.prepareStatement(query);
         preparedStmt.setString (1, (String) jsonObject.get("username"));
         preparedStmt.setString (2, (String) jsonObject.get("email"));
         preparedStmt.setString (3, (String) jsonObject.get("pass"));
         preparedStmt.setString (4, (String) jsonObject.get("mobileNumber"));
         preparedStmt.setString (5, (String) jsonObject.get("status"));
+        preparedStmt.setString (6, (String) jsonObject.get("birthdate"));
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("onr user created");
