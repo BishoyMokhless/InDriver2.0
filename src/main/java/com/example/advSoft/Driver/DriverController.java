@@ -45,22 +45,7 @@ public class DriverController implements DriverService , UserServices {
     @Override
     @PostMapping
     public String login(String person) throws SQLException, ClassNotFoundException, SQLException {
-        JSONArray allDrivers;
-        JSONObject jsonObject = new JSONObject(person);
-        allDrivers = dbDriver.listAll();
-
-        for (int i =0; i<allDrivers.length();i++)
-        {
-            JSONObject temp = allDrivers.getJSONObject(i);
-            Boolean bool1 = temp.get("pass").equals(jsonObject.get("pass"));
-            Boolean bool2 = temp.get("username").equals(jsonObject.get("username"));
-            if( bool1 && bool2)
-            {
-                System.out.println("Login successfully");
-            }
-            break;
-        }
-
+        JSONObject jsonObject = dbDriver.login(person);
         return jsonObject.toString();
     }
 

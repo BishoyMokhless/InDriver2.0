@@ -80,7 +80,7 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
         System.out.println("one driver created");
     }
 
-    public JSONObject driverLogin(String person) throws SQLException, ClassNotFoundException {
+    public JSONObject login(String person) throws SQLException, ClassNotFoundException {
         JSONObject jsonObject = new JSONObject(person);
         JSONObject newjsonObject = null;
         Statement statement = establish_connection().createStatement();
