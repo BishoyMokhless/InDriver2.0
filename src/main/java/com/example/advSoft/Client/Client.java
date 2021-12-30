@@ -1,9 +1,9 @@
 package com.example.advSoft.Client;
-import com.example.advSoft.User.UserModel;
+import com.example.advSoft.User.User;
 
 import java.util.Date;
 
-public class Client extends UserModel  {
+public class Client extends User {
 
     Date birthdate;
     public Client() {

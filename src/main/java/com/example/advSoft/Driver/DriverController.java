@@ -1,18 +1,13 @@
 package com.example.advSoft.Driver;
 
-import com.example.advSoft.User.User;
-import com.example.advSoft.connection.ClientDatabaseConnect;
-import com.example.advSoft.connection.DataBaseConnect;
-import com.example.advSoft.connection.DriverDatabaseConnect;
-import com.example.advSoft.connection.RideDatabaseConnect;
+import com.example.advSoft.User.UserServices;
+import com.example.advSoft.connection.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.sql.*;
-import java.sql.Connection;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +15,12 @@ import java.util.List;
 
 @RequestMapping("/api/driver")
 @RestController
-public class DriverController implements DriverService ,User{
+public class DriverController implements DriverService , UserServices {
     DataBaseConnect dbDriver = new ClientDatabaseConnect();
     DataBaseConnect dbRide = new RideDatabaseConnect();
+    DataBaseConnect dbReqRide = new RideDatabaseConnect();
+    DataBaseConnect dbFavAreas = new FavAreas();
+    DataBaseConnect dbOffer = new OfferDatabaseConnect();
     @Autowired
     DriverController(){
 
@@ -93,16 +91,35 @@ public class DriverController implements DriverService ,User{
             {
                 allDriverRides.put(temp);
             }
-
         }
         return allDriverRides.toString();
     }
 
-
+    //TEST REQUIRED
     @RequestMapping("listAllRequestedRides/{DriverName}")
     @Override
     @GetMapping
     public String listAllRequestedRides(@PathVariable("DriverName") String DriverName) throws SQLException, ClassNotFoundException {
+        JSONArray allReqRides = dbReqRide.listAll();
+        JSONArray allFavAreas = dbFavAreas.listAll();
+        List<String> favAreas = new ArrayList<String>();
+        List<String> specificReqRides = new ArrayList<String>();
+        for(int i = 0; i < allFavAreas.length(); i++)
+        {
+           if(allFavAreas.getJSONObject(i).get("driverName").equals(DriverName))
+                favAreas.add(allFavAreas.getJSONObject(i).get("area").toString());
+        }
+        for(int i = 0; i < allReqRides.length(); i++)
+        {
+            for(int j = 0; j < favAreas.size(); j++)
+            {
+                if(allReqRides.getJSONObject(i).get("source").equals(favAreas.get(j)))
+                    specificReqRides.add(allReqRides.getJSONObject(i).toString());
+            }
+        }
+        return specificReqRides.toString();
+
+
 //        Connection c1 = establish_connection();
 //        JSONArray arr = new JSONArray();
 //        List<String> FavArea = new ArrayList<String>();
@@ -128,13 +145,14 @@ public class DriverController implements DriverService ,User{
 //            }
 //        }
 //        return arr.toString();
-        return null;
+
     }
 
     @RequestMapping("sendOffer/{id}")
     @Override
     @PostMapping
     public void sendOffer(@PathVariable("id") int id,@RequestBody  String req) throws SQLException, ClassNotFoundException {
+
 //        boolean inRide = false;
 //        JSONObject jsonObject = new JSONObject(req);
 //        Statement statement = establish_connection().createStatement();
@@ -167,29 +185,29 @@ public class DriverController implements DriverService ,User{
 //        }
     }
 
+    //TEST REQUIRED
     @RequestMapping("startTrip/{id}")
     @Override
     @PostMapping
     public void startTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
     {
-//        Connection c1 = establish_connection();
-//        String query = "update ride set arrive_source_time = CURRENT_TIMESTAMP where id = '" + id + "'";
-//        PreparedStatement preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.executeUpdate();
-//        establish_connection().close();
-//        System.out.println("the trip is started");
+        JSONObject jsonObject = dbRide.get(id);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        jsonObject.append("arrive_source_time", dtf.format(now));
+        dbRide.update(jsonObject, id);
     }
 
+    //TEST REQUIRED
     @RequestMapping("endTrip/{id}")
     @Override
     @PostMapping
     public void endTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
     {
-//        Connection c1 = establish_connection();
-//        String query = "update ride set arrive_destination_time = CURRENT_TIMESTAMP where id = '" + id + "'";
-//        PreparedStatement preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.executeUpdate();
-//        establish_connection().close();
-//        System.out.println("the trip is ended");
+        JSONObject jsonObject = dbRide.get(id);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        jsonObject.append("arrive_destination_time", dtf.format(now));
+        dbRide.update(jsonObject, id);
     }
 }

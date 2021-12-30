@@ -1,9 +1,5 @@
 package com.example.advSoft.Admin;
 
-import com.example.advSoft.Driver.Driver;
-import com.example.advSoft.User.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

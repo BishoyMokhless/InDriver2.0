@@ -1,7 +1,7 @@
 package com.example.advSoft.Client;
 
  import com.example.advSoft.Discount.*;
- import com.example.advSoft.User.User;
+ import com.example.advSoft.User.UserServices;
  import com.example.advSoft.connection.ClientDatabaseConnect;
  import com.example.advSoft.connection.DataBaseConnect;
  import com.example.advSoft.connection.OfferDatabaseConnect;
@@ -16,7 +16,7 @@ package com.example.advSoft.Client;
 
 @RequestMapping("/api/client")
 @RestController
-public class ClientController  implements  ClientService , User {
+public class ClientController  implements  ClientService , UserServices {
     DataBaseConnect dbClient = new ClientDatabaseConnect();
     DataBaseConnect dbOffer = new OfferDatabaseConnect();
     DataBaseConnect dbReqRide = new ReqRideDatabaseConnect();

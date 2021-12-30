@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RideDatabaseConnect implements DataBaseConnect {
     @Override
@@ -16,7 +18,6 @@ public class RideDatabaseConnect implements DataBaseConnect {
 
     @Override
     public void set(JSONObject ride) throws SQLException, ClassNotFoundException {
-
         Integer clientsNumber =Integer.parseInt((String) ride.get("clients_number"));
         String query = " insert into ride (offer_id,arrive_source_time,arrive_destination_time,discount_value,discount_percent,price_after_discount) values (?,?,?,?,?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
@@ -26,12 +27,18 @@ public class RideDatabaseConnect implements DataBaseConnect {
         preparedStmt.setString (4, (String) ride.get("discount_value"));
         preparedStmt.setString (5, (String) ride.get("discount_percent"));
         preparedStmt.setString (6, (String) ride.get("price_after_discount"));
+        System.out.println("The Ride is added successfully");
 
     }
 
+    // TEST REQUIRED
     @Override
-    public void delete(int id) {
-
+    public void delete(int id) throws SQLException, ClassNotFoundException {
+        String query = "delete from ride where id = '" + id + "'";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The Ride is Deleted successfully");
     }
 
     @Override
@@ -70,28 +77,66 @@ public class RideDatabaseConnect implements DataBaseConnect {
         return allRides;
     }
 
-
+    // TEST REQUIRED
     public JSONArray listAllByDriverName(String DriverName) throws SQLException, ClassNotFoundException {
+        List<Integer> offerIds = new ArrayList<Integer>();
         JSONArray allRides = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from ride where ( DriverName= '" + DriverName + "')");
+        ResultSet rs = statement.executeQuery("select *  from offer where ( DriverName= '" + DriverName + "' and accepted = 1)");
         while(rs.next())
         {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("offer_id",rs.getInt("offer_id"));
-            jsonObject.put("arrive_source_time",rs.getDate("arrive_source_time"));
-            jsonObject.put("arrive_destination_time",rs.getTimestamp("arrive_destination_time"));
-            jsonObject.put("discount_value",rs.getDouble("discount_value"));
-            jsonObject.put("discount_percent",rs.getDouble("discount_percent"));
-            jsonObject.put("price_after_discount",rs.getDouble("price_after_discount"));
-            allRides.put(jsonObject);
+            offerIds.add(rs.getInt("offer_id"));
+        }
+        for(int offerId: offerIds)
+        {
+            Statement statement2 = establish_connection().createStatement();
+            ResultSet rs2 = statement.executeQuery("select *  from ride where ( offer_id= '" + offerId + "')");
+            if(rs2.next())
+            {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("offer_id",rs.getInt("offer_id"));
+                jsonObject.put("arrive_source_time",rs.getDate("arrive_source_time"));
+                jsonObject.put("arrive_destination_time",rs.getTimestamp("arrive_destination_time"));
+                jsonObject.put("discount_value",rs.getDouble("discount_value"));
+                jsonObject.put("discount_percent",rs.getDouble("discount_percent"));
+                jsonObject.put("price_after_discount",rs.getDouble("price_after_discount"));
+                allRides.put(jsonObject);
+            }
         }
         return allRides;
     }
 
-
+    //TEST REQUIRED
     @Override
-    public void update(JSONObject temp,int id) throws SQLException, ClassNotFoundException {
+    public void update(JSONObject ride,int id) throws SQLException, ClassNotFoundException {
+        String query = " update  ride SET (offer_id, arrive_source_time, arrive_destination_time, discount_value, discount_percent, price_after_discount) values (?, ?, ?, ?, ?, ?) WHERE ('id = "+id+"')";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.setString(1, (String) ride.get("offer_id"));
+        preparedStmt.setString (2, (String) ride.get("arrive_source_time)"));
+        preparedStmt.setString (3, (String) ride.get("arrive_destination_time"));
+        preparedStmt.setString (4, (String) ride.get("discount_value"));
+        preparedStmt.setString (5, (String) ride.get("discount_percent"));
+        preparedStmt.setString (6, (String) ride.get("price_after_discount"));
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The Ride updated successfully");
+    }
 
+    //TEST REQUIRED
+    public void updateSourceTime(int id) throws SQLException, ClassNotFoundException {
+        String query = "update ride set arrive_source_time = CURRENT_TIMESTAMP where id = '" + id + "'";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The Trip is Started");
+    }
+
+    //TEST REQUIRED
+    public void updateDestinationTime(int id) throws SQLException, ClassNotFoundException {
+        String query = "update ride set arrive_destination_time = CURRENT_TIMESTAMP where id = '" + id + "'";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The Trip is Ended");
     }
 }

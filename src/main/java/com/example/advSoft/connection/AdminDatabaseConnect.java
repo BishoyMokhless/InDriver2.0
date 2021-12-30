@@ -1,11 +1,9 @@
 package com.example.advSoft.connection;
 
-import com.example.advSoft.Admin.Admin;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.sql.*;
-import java.util.List;
+
 
 public class AdminDatabaseConnect implements DataBaseConnect {
 

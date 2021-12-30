@@ -16,23 +16,29 @@ public class OfferDatabaseConnect implements DataBaseConnect{
         Connection connection= DriverManager.getConnection(url,"root","root");
         return connection;
     }
-
+    //TEST REQUIRED
     @Override
     public void set(JSONObject offer) throws SQLException, ClassNotFoundException {
         String query = " insert into offer (driverName,ReqRID,price,accepted) values (?,?,?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString(1, (String) offer.get("driverName"));
         preparedStmt.setString (2, (String) offer.get("ReqRID)"));
-        preparedStmt.setString (3, (String) offer.get("price"));
-        preparedStmt.setString (4, (String) offer.get("accepted"));
+        preparedStmt.setString (3, (String) offer.get("offerTime)"));
+        preparedStmt.setString (4, (String) offer.get("price"));
+        preparedStmt.setString (5, (String) offer.get("accepted"));
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("one offer created");
+        System.out.println("one offer created successfully");
     }
 
+    //TEST REQUIRED
     @Override
-    public void delete(int id) {
-
+    public void delete(int id) throws SQLException, ClassNotFoundException {
+        String query = "delete from offer where id = '" + id + "'";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The Offer is Deleted successfully");
     }
 
     @Override
@@ -48,7 +54,6 @@ public class OfferDatabaseConnect implements DataBaseConnect{
             offer.put("offerTime",rs.getString("offerTime"));
             offer.put("price",rs.getString("price"));
         }
-
         return offer;
     }
 
@@ -84,7 +89,6 @@ public class OfferDatabaseConnect implements DataBaseConnect{
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one offer updated");
-
     }
 
 }
