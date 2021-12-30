@@ -12,12 +12,9 @@ public interface DataBaseConnect {
     public Connection establish_connection() throws SQLException, ClassNotFoundException;
     public void set(JSONObject object) throws SQLException, ClassNotFoundException;
     public void delete(int id);
-    public JSONObject get(int id);
+    public JSONObject get(int id) throws SQLException, ClassNotFoundException;
     public JSONArray listAll() throws SQLException, ClassNotFoundException;
-    public void update(Object temp);
-
-
-
+    public void update(JSONObject temp) throws SQLException, ClassNotFoundException;
 
 
 }

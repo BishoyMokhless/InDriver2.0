@@ -12,7 +12,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.advSoft.connection.DataBaseConnect.establish_connection;
 
 @RequestMapping("/api/admin")
 @RestController
@@ -20,7 +19,10 @@ public class AdminController implements AdminServices{
     DataBaseConnect dbAdmin = new AdminDatabaseConnect();
     DataBaseConnect dbDriver = new DriverDatabaseConnect();
     DataBaseConnect dbClient = new ClientDatabaseConnect();
+    @Autowired
+    AdminController(){
 
+    }
 
     @RequestMapping("listPendingDrivers")
     @Override
@@ -43,13 +45,9 @@ public class AdminController implements AdminServices{
     @RequestMapping("verifyDriver")
     @Override
     @PostMapping
-    public void verifyDriverRegistration(String person) throws SQLException, ClassNotFoundException {
+    public void verifyDriverRegistration(@RequestBody String person) throws SQLException, ClassNotFoundException {
         JSONObject jsonObject = new JSONObject(person);
-        Connection c1 = establish_connection();
-        String query = " update driver set status='Verified' where  username='"+(String) jsonObject.get("username")+"'";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.executeUpdate();
-        establish_connection().close();
+        dbDriver.update(jsonObject);
         System.out.println("one driver Verified");
     }
 
@@ -57,42 +55,39 @@ public class AdminController implements AdminServices{
     @Override
     @PostMapping
     public void suspendAccountDriver( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
-        Connection c1 = establish_connection();
-        String query = " update driver set status='Suspended' where  username='"+username+"'";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("one driver suspended");
-        System.out.println(username);
+//        JSONObject jsonObject = new JSONObject(username);
+//        dbDriver.update(jsonObject);
+//        System.out.println("one driver suspended");
+//        System.out.println(username);
     }
 
     @RequestMapping("suspendAccountClient/{username}")
     @Override
     @PostMapping
     public void suspendAccountClient( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
-        Connection c1 = establish_connection();
-        String query = " update client set status='Suspended' where  username='"+username+"'";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("one Client suspended");
+//        Connection c1 = establish_connection();
+//        String query = " update client set status='Suspended' where  username='"+username+"'";
+//        PreparedStatement preparedStmt = c1.prepareStatement(query);
+//        preparedStmt.executeUpdate();
+//        establish_connection().close();
+//        System.out.println("one Client suspended");
     }
 
     @RequestMapping("setDiscountArea")
     @Override
     @PostMapping
     public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException {
-        System.out.println(areas);
-        Connection c1 = establish_connection();
-        JSONArray jsonArray = new JSONArray(areas);
-        for (Object jsonOb : jsonArray)
-        {
-            Statement statement = establish_connection().createStatement();
-            String query = " insert into DiscountAreas (area) values (?)";
-            PreparedStatement preparedStmt = c1.prepareStatement(query);
-            preparedStmt.setString (1, (String) jsonOb);
-            preparedStmt.executeUpdate();
-        }
-        System.out.println("areas added");
+//        System.out.println(areas);
+//        Connection c1 = establish_connection();
+//        JSONArray jsonArray = new JSONArray(areas);
+//        for (Object jsonOb : jsonArray)
+//        {
+//            Statement statement = establish_connection().createStatement();
+//            String query = " insert into DiscountAreas (area) values (?)";
+//            PreparedStatement preparedStmt = c1.prepareStatement(query);
+//            preparedStmt.setString (1, (String) jsonOb);
+//            preparedStmt.executeUpdate();
+//        }
+//        System.out.println("areas added");
     }
 }

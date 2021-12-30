@@ -18,19 +18,16 @@ public class OfferDatabaseConnect implements DataBaseConnect{
     }
 
     @Override
-    public void set(JSONObject object) throws SQLException, ClassNotFoundException {
-        String query = " insert into offer (username,email,pass,mobileNumber,status,birthdate) values (?,?,?,?,?,?)";
+    public void set(JSONObject offer) throws SQLException, ClassNotFoundException {
+        String query = " insert into offer (driverName,ReqRID,price,accepted) values (?,?,?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString (1, (String) Client.get("username"));
-        preparedStmt.setString (2, (String) Client.get("email"));
-        preparedStmt.setString (3, (String) Client.get("pass"));
-        preparedStmt.setString (4, (String) Client.get("mobileNumber"));
-        preparedStmt.setString (5, "UnVerified");
-        preparedStmt.setString (6, "birthdate");
-
+        preparedStmt.setString(1, (String) offer.get("driverName"));
+        preparedStmt.setString (2, (String) offer.get("ReqRID)"));
+        preparedStmt.setString (3, (String) offer.get("price"));
+        preparedStmt.setString (4, (String) offer.get("accepted"));
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("one Client created");
+        System.out.println("one offer created");
     }
 
     @Override
@@ -39,8 +36,20 @@ public class OfferDatabaseConnect implements DataBaseConnect{
     }
 
     @Override
-    public JSONObject get(int id) {
-        return null;
+    public JSONObject get(int id) throws SQLException, ClassNotFoundException {
+        JSONObject offer = new JSONObject();
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select *  from offer where  id = '"+ id + "'");
+        while(rs.next())
+        {
+            offer.put("driverName",rs.getString("driverName"));
+            offer.put("id",rs.getString("id"));
+            offer.put("ReqRID",rs.getString("ReqRID"));
+            offer.put("offerTime",rs.getString("offerTime"));
+            offer.put("price",rs.getString("price"));
+        }
+
+        return offer;
     }
 
     @Override
@@ -62,8 +71,19 @@ public class OfferDatabaseConnect implements DataBaseConnect{
         return allOffers;
     }
 
+    //not Sure if the update query work
     @Override
-    public void update(Object temp) {
+    public void update(JSONObject offer) throws SQLException, ClassNotFoundException {
+
+        String query = " update  offer SET (driverName,ReqRID,price,accepted) values (?,?,?,?) WHERE ('id = "+(int) offer.get("id")+"')";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.setString(1, (String) offer.get("driverName"));
+        preparedStmt.setString (2, (String) offer.get("ReqRID)"));
+        preparedStmt.setString (3, (String) offer.get("price"));
+        preparedStmt.setString (4, (String) offer.get("accepted"));
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("one offer updated");
 
     }
 

@@ -4,6 +4,8 @@ package com.example.advSoft.Client;
  import com.example.advSoft.User.User;
  import com.example.advSoft.connection.ClientDatabaseConnect;
  import com.example.advSoft.connection.DataBaseConnect;
+ import com.example.advSoft.connection.OfferDatabaseConnect;
+ import com.example.advSoft.connection.ReqRideDatabaseConnect;
  import org.json.JSONArray;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +18,22 @@ package com.example.advSoft.Client;
 @RestController
 public class ClientController  implements  ClientService , User {
     DataBaseConnect dbClient = new ClientDatabaseConnect();
+    DataBaseConnect dbOffer = new OfferDatabaseConnect();
+    DataBaseConnect dbReqRide = new ReqRideDatabaseConnect();
     @Autowired
+    ClientController(){
 
+    }
 
     @Override
     @GetMapping
     public String getAll() throws SQLException, ClassNotFoundException {
-        JSONArray arr = new JSONArray();
-        arr = dbClient.listAll();
-        return arr.toString();
+        JSONArray allClients = new JSONArray();
+        allClients = dbClient.listAll();
+        return allClients.toString();
     }
     @PostMapping
-    public void register( @RequestBody String person) throws SQLException, ClassNotFoundException, SQLException {
+    public void register( @RequestBody String person) throws  ClassNotFoundException, SQLException {
         JSONObject jsonObject = new JSONObject(person);
         dbClient.set(jsonObject);
     }
@@ -35,9 +41,9 @@ public class ClientController  implements  ClientService , User {
     @RequestMapping("login")
     @Override
     @PostMapping
-    public String login(String person) throws SQLException, ClassNotFoundException, SQLException {
+    public String login(String person) throws  ClassNotFoundException, SQLException {
 
-        JSONArray allClients = new JSONArray();
+        JSONArray allClients;
         JSONObject jsonObject = new JSONObject(person);
         allClients = dbClient.listAll();
 
@@ -61,81 +67,59 @@ public class ClientController  implements  ClientService , User {
     @PostMapping
     public void RequestRide(@RequestBody String req) throws SQLException, ClassNotFoundException {
         JSONObject jsonObject = new JSONObject(req);
-        Integer clientsNumber =Integer.parseInt((String) jsonObject.get("clients_number"));
-        Connection c1 = establish_connection();
-        String query = " insert into requestedrides (clientName,source,destination,accepted,clients_number) values (?,?,?,?,?)";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.setString (1, (String) jsonObject.get("ClientName"));
-        preparedStmt.setString (2, (String) jsonObject.get("source"));
-        preparedStmt.setString (3, (String) jsonObject.get("destination"));
-        preparedStmt.setInt (4, 0);
-        preparedStmt.setInt (5, clientsNumber);
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("onr request created");
+        dbReqRide.set(jsonObject);
+        System.out.println("one request created");
     }
 
     @RequestMapping("viewOffers/{ClientName}")
     @GetMapping
     public String viewOffers(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException {
-        Connection c1 = establish_connection();
-        JSONArray arrOffers = new JSONArray();
-        List<String> Ids = new ArrayList<String>();
-        JSONArray arr = new JSONArray();
-        Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select id from requestedrides where  clientName='"+ClientName+"' and  accepted=0 ");
-        while(rs.next())
-        {
-            Ids.add(rs.getString("id"));
-        }
+        JSONArray allOffers ;
+        allOffers = dbOffer.listAll();
+        JSONArray allClientOffers= new JSONArray();
+        for (int i =0; i<allOffers.length();i++) {
+            JSONObject temp = allOffers.getJSONObject(i);
+            if(temp.get("ClientName").equals(ClientName))
+            {
+                allClientOffers.put(temp);
+            }
 
-       for (int i =0;i<Ids.size();i++)
-       {
-           rs = statement.executeQuery("select *  from offer where ReqRID='"+Ids.get(i)+"' and  accepted=0 ");
-           while(rs.next())
-           {
-               JSONObject jsonObject = new JSONObject();
-               jsonObject.put("driverName",rs.getString("driverName"));
-               jsonObject.put("id",rs.getString("id"));
-               jsonObject.put("ReqRID",rs.getString("ReqRID"));
-               jsonObject.put("offerTime",rs.getString("offerTime"));
-               jsonObject.put("price",rs.getString("price"));
-               arr.put(jsonObject);
-           }
-       }
-        return arr.toString();
+        }
+        return allClientOffers.toString();
     }
 
     @RequestMapping("acceptOffer/{id}")
     @PostMapping
-    public void acceptOffer(@PathVariable("id") String id) throws SQLException, ClassNotFoundException {
-         JSONArray arrOffers = new JSONArray();
-         JSONArray arr = new JSONArray();
-        List<String> Ids = new ArrayList<String>();
-        Connection c1 = establish_connection();
-        String query = "update offer set accepted=1 where id ="+id+" ";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.executeUpdate();
-        String reqId="";
-        Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select * from offer where  id='"+id+"'");
-        while(rs.next())
-        {
-            reqId=rs.getString("ReqRID");
-        }
-        query = "update requestedrides set accepted=1 where id ="+reqId+" ";
-        preparedStmt = c1.prepareStatement(query);
-        preparedStmt.executeUpdate();
-         c1 = establish_connection();
-         query = " insert into ride (offer_id) values (?)";
-         preparedStmt = c1.prepareStatement(query);
-        preparedStmt.setString (1, id);
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("one accepted Offer ");
+    public void acceptOffer(@PathVariable("id") String id) throws SQLException, ClassNotFoundException
+    {
+//         JSONArray arrOffers = new JSONArray();
+//         JSONArray arr = new JSONArray();
+//        List<String> Ids = new ArrayList<String>();
+//        Connection c1 = establish_connection();
+//        String query = "update offer set accepted=1 where id ="+id+" ";
+//        PreparedStatement preparedStmt = c1.prepareStatement(query);
+//        preparedStmt.executeUpdate();
+//        String reqId="";
+//        Statement statement = establish_connection().createStatement();
+//        ResultSet rs = statement.executeQuery("select * from offer where  id='"+id+"'");
+//        while(rs.next())
+//        {
+//            reqId=rs.getString("ReqRID");
+//        }
+//        query = "update requestedrides set accepted=1 where id ="+reqId+" ";
+//        preparedStmt = c1.prepareStatement(query);
+//        preparedStmt.executeUpdate();
+//         c1 = establish_connection();
+//         query = " insert into ride (offer_id) values (?)";
+//         preparedStmt = c1.prepareStatement(query);
+//        preparedStmt.setString (1, id);
+//        preparedStmt.executeUpdate();
+//        establish_connection().close();
+//        System.out.println("one accepted Offer ");
     }
 
     @RequestMapping("checkDiscount/{ClientName}")
+    @Override
     @GetMapping
     public String checkDiscount(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException
     {

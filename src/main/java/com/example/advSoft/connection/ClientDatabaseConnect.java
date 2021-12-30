@@ -65,8 +65,18 @@ public class ClientDatabaseConnect implements DataBaseConnect {
 
 
     @Override
-    public void update(Object temp) {
+    public void update(JSONObject Client) throws SQLException, ClassNotFoundException {
 
+        String query = " update client set (username,email,pass,mobileNumber,status,birthdate) values (?,?,?,?,?,?) where  id='"+Client.get("id")+"'";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.setString (1, (String) Client.get("username"));
+        preparedStmt.setString (2, (String) Client.get("email"));
+        preparedStmt.setString (3, (String) Client.get("pass"));
+        preparedStmt.setString (4, (String) Client.get("mobileNumber"));
+        preparedStmt.setString (5, (String) Client.get("status"));
+        preparedStmt.setString (6, (String) Client.get("birthdate"));
+        preparedStmt.executeUpdate();
+        establish_connection().close();
     }
 
 
