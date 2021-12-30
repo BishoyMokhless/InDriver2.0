@@ -11,15 +11,16 @@ package com.example.advSoft.Client;
  import java.sql.*;
  import java.util.ArrayList;
  import java.util.List;
- import static com.example.advSoft.connection.DataBaseConnect.establish_connection;
 
 @RequestMapping("/api/client")
 @RestController
-public class ClientController  extends Client implements  ClientService , User {
+public class ClientController  implements  ClientService , User {
+    DataBaseConnect dbClient = new ClientDatabaseConnect();
     @Autowired
+
+
     @Override
     @GetMapping
-
     public String getAll() throws SQLException, ClassNotFoundException {
         JSONArray arr = new JSONArray();
         arr = dbClient.listAll();
@@ -28,18 +29,7 @@ public class ClientController  extends Client implements  ClientService , User {
     @PostMapping
     public void register( @RequestBody String person) throws SQLException, ClassNotFoundException, SQLException {
         JSONObject jsonObject = new JSONObject(person);
-        Connection c1 = establish_connection();
-        String query = " insert into client (username,email,pass,mobileNumber,status,birthdate) values (?,?,?,?,?,?)";
-        PreparedStatement preparedStmt = c1.prepareStatement(query);
-        preparedStmt.setString (1, (String) jsonObject.get("username"));
-        preparedStmt.setString (2, (String) jsonObject.get("email"));
-        preparedStmt.setString (3, (String) jsonObject.get("pass"));
-        preparedStmt.setString (4, (String) jsonObject.get("mobileNumber"));
-        preparedStmt.setString (5, (String) jsonObject.get("status"));
-        preparedStmt.setString (6, (String) jsonObject.get("birthdate"));
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("onr user created");
+        dbClient.set(jsonObject);
     }
 
     @RequestMapping("login")
@@ -49,17 +39,18 @@ public class ClientController  extends Client implements  ClientService , User {
 
         JSONArray allClients = new JSONArray();
         JSONObject jsonObject = new JSONObject(person);
-        Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from client where username='"+ (String) jsonObject.get("username") +"' and pass='"+ (String) jsonObject.get("pass") + "'" );
-        while(rs.next())
+        allClients = dbClient.listAll();
+
+        for (int i =0; i<allClients.length();i++)
         {
-            System.out.println("in login");
-            JSONObject newjsonObject = new JSONObject();
-            newjsonObject.put("username",rs.getString("username"));
-            newjsonObject.put("email",rs.getString("email"));
-            newjsonObject.put("mobileNumber",rs.getString("mobileNumber"));
-             newjsonObject.put("status",rs.getString("status"));
-            arr.put(newjsonObject);
+            JSONObject temp = allClients.getJSONObject(i);
+            Boolean bool1 = temp.get("pass").equals(jsonObject.get("pass"));
+            Boolean bool2 = temp.get("username").equals(jsonObject.get("username"));
+            if( bool1 && bool2)
+            {
+                System.out.println("Login successfully");
+            }
+            break;
         }
 
         return jsonObject.toString();
