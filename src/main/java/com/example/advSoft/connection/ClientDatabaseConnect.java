@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.sql.*;
 import java.util.List;
 
-public class ClientDatabaseConnect implements DataBaseConnect {
+public class ClientDatabaseConnect implements IClientDatabaseConnect {
 
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
@@ -77,6 +77,28 @@ public class ClientDatabaseConnect implements DataBaseConnect {
         preparedStmt.setString (6, (String) Client.get("birthdate"));
         preparedStmt.executeUpdate();
         establish_connection().close();
+    }
+
+    @Override
+    public JSONObject login(String client) throws SQLException, ClassNotFoundException {
+
+        JSONObject jsonObject = new JSONObject(client);
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select *  from client where username='"+ (String) jsonObject.get("username") +"' and pass='"+ (String) jsonObject.get("pass") + "'" );
+        JSONObject newjsonObject = new JSONObject();
+        if(rs.next())
+        {
+            newjsonObject.put("username",rs.getString("username"));
+            newjsonObject.put("email",rs.getString("email"));
+            newjsonObject.put("mobileNumber",rs.getString("mobileNumber"));
+            newjsonObject.put("status",rs.getString("status"));
+            return  newjsonObject;
+        }
+        else
+        {
+            newjsonObject.put("message","notfound");
+            return  newjsonObject;
+        }
     }
 
 

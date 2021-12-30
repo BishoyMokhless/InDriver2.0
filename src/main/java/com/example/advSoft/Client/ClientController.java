@@ -1,11 +1,7 @@
 package com.example.advSoft.Client;
-
  import com.example.advSoft.Discount.*;
  import com.example.advSoft.User.UserServices;
- import com.example.advSoft.connection.ClientDatabaseConnect;
- import com.example.advSoft.connection.DataBaseConnect;
- import com.example.advSoft.connection.OfferDatabaseConnect;
- import com.example.advSoft.connection.ReqRideDatabaseConnect;
+ import com.example.advSoft.connection.*;
  import org.json.JSONArray;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +13,10 @@ package com.example.advSoft.Client;
 @RequestMapping("/api/client")
 @RestController
 public class ClientController  implements  ClientService , UserServices {
-    DataBaseConnect dbClient = new ClientDatabaseConnect();
+    IClientDatabaseConnect dbClient = new ClientDatabaseConnect();
     DataBaseConnect dbOffer = new OfferDatabaseConnect();
     DataBaseConnect dbReqRide = new ReqRideDatabaseConnect();
+
     @Autowired
     ClientController(){
 
@@ -42,23 +39,7 @@ public class ClientController  implements  ClientService , UserServices {
     @Override
     @PostMapping
     public String login(String person) throws  ClassNotFoundException, SQLException {
-
-        JSONArray allClients;
-        JSONObject jsonObject = new JSONObject(person);
-        allClients = dbClient.listAll();
-
-        for (int i =0; i<allClients.length();i++)
-        {
-            JSONObject temp = allClients.getJSONObject(i);
-            Boolean bool1 = temp.get("pass").equals(jsonObject.get("pass"));
-            Boolean bool2 = temp.get("username").equals(jsonObject.get("username"));
-            if( bool1 && bool2)
-            {
-                System.out.println("Login successfully");
-            }
-            break;
-        }
-
+        JSONObject jsonObject =   dbClient.login(person);
         return jsonObject.toString();
     }
 
@@ -74,7 +55,7 @@ public class ClientController  implements  ClientService , UserServices {
     @RequestMapping("viewOffers/{ClientName}")
     @GetMapping
     public String viewOffers(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException {
-        JSONArray allOffers ;
+        JSONArray allOffers;
         allOffers = dbOffer.listAll();
         JSONArray allClientOffers= new JSONArray();
         for (int i =0; i<allOffers.length();i++) {
@@ -83,7 +64,6 @@ public class ClientController  implements  ClientService , UserServices {
             {
                 allClientOffers.put(temp);
             }
-
         }
         return allClientOffers.toString();
     }

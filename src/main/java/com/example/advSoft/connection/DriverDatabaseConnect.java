@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.advSoft.Driver.Driver;
 
-public class DriverDatabaseConnect implements DataBaseConnect{
+public class DriverDatabaseConnect implements IDriverDatabaseConnect{
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";
@@ -31,7 +31,6 @@ public class DriverDatabaseConnect implements DataBaseConnect{
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one driver created");
-
     }
 
     @Override
@@ -79,5 +78,26 @@ public class DriverDatabaseConnect implements DataBaseConnect{
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one driver created");
+    }
+
+    public JSONObject driverLogin(String person) throws SQLException, ClassNotFoundException {
+        JSONObject jsonObject = new JSONObject(person);
+        JSONObject newjsonObject = null;
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select *  from driver where username ='" + jsonObject.get("username") +"' and pass = '" +  jsonObject.get("pass") + "'");
+        if(rs.next())
+        {
+            newjsonObject = new JSONObject();
+            newjsonObject.put("username",rs.getString("username"));
+            newjsonObject.put("pass",rs.getString("pass"));
+            newjsonObject.put("email",rs.getString("email"));
+            newjsonObject.put("mobileNumber",rs.getString("mobileNumber"));
+            newjsonObject.put("nationalID",rs.getString("nationalID"));
+            newjsonObject.put("drive_license",rs.getString("drive_license"));
+            newjsonObject.put("status",rs.getString("status"));
+        }
+        else
+            newjsonObject.put("message","notfound");
+        return newjsonObject;
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/driver")
 @RestController
 public class DriverController implements DriverService , UserServices {
-    DataBaseConnect dbDriver = new ClientDatabaseConnect();
+    IDriverDatabaseConnect dbDriver = new DriverDatabaseConnect();
     DataBaseConnect dbRide = new RideDatabaseConnect();
     DataBaseConnect dbReqRide = new RideDatabaseConnect();
     DataBaseConnect dbFavAreas = new FavAreas();

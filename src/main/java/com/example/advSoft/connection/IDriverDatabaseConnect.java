@@ -1,4 +1,4 @@
 package com.example.advSoft.connection;
 
-public interface IDriverDatabaseConnect {
+public interface IDriverDatabaseConnect extends DataBaseConnect {
 }
