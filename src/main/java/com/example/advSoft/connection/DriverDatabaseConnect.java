@@ -66,8 +66,8 @@ public class DriverDatabaseConnect implements DataBaseConnect{
     }
 
     @Override
-    public void update(JSONObject Driver) throws SQLException, ClassNotFoundException {
-        String query = " update driver set(username,email,pass,mobileNumber,nationalID,drive_license,status) where  id='"+ Driver.get("id")+"'";
+    public void update(JSONObject Driver,int id) throws SQLException, ClassNotFoundException {
+        String query = " update driver set(username,email,pass,mobileNumber,nationalID,drive_license,status) where  id='"+ id+"'";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString (1, (String) Driver.get("username"));
         preparedStmt.setString (2, (String) Driver.get("email"));

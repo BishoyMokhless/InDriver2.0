@@ -40,7 +40,7 @@ public class AdminDatabaseConnect implements DataBaseConnect {
 
 
     @Override
-    public void update(JSONObject temp) {
+    public void update(JSONObject temp,int id) {
 
     }
 }

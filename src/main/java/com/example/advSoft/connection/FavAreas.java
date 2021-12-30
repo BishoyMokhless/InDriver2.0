@@ -49,7 +49,7 @@ public class FavAreas implements DataBaseConnect{
     }
 
     @Override
-    public void update(JSONObject temp) throws SQLException, ClassNotFoundException {
+    public void update(JSONObject temp,int id) throws SQLException, ClassNotFoundException {
 
     }
 }

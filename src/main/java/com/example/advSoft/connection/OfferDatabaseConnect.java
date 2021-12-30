@@ -73,9 +73,9 @@ public class OfferDatabaseConnect implements DataBaseConnect{
 
     //not Sure if the update query work
     @Override
-    public void update(JSONObject offer) throws SQLException, ClassNotFoundException {
+    public void update(JSONObject offer,int id) throws SQLException, ClassNotFoundException {
 
-        String query = " update  offer SET (driverName,ReqRID,price,accepted) values (?,?,?,?) WHERE ('id = "+(int) offer.get("id")+"')";
+        String query = " update  offer SET (driverName,ReqRID,price,accepted) values (?,?,?,?) WHERE ('id = "+id+"')";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString(1, (String) offer.get("driverName"));
         preparedStmt.setString (2, (String) offer.get("ReqRID)"));

@@ -1,5 +1,6 @@
 package com.example.advSoft.Admin;
 
+import com.example.advSoft.Driver.Driver;
 import com.example.advSoft.connection.AdminDatabaseConnect;
 import com.example.advSoft.connection.ClientDatabaseConnect;
 import com.example.advSoft.connection.DataBaseConnect;
@@ -46,8 +47,21 @@ public class AdminController implements AdminServices{
     @Override
     @PostMapping
     public void verifyDriverRegistration(@RequestBody String person) throws SQLException, ClassNotFoundException {
+        JSONArray allDrivers = dbDriver.listAll();
         JSONObject jsonObject = new JSONObject(person);
-        dbDriver.update(jsonObject);
+        int id = 0;
+        for (int i=0;i<allDrivers.length();i++) {
+            if (allDrivers.getJSONObject(i).equals(jsonObject))
+                id = i;
+            break;
+        }
+        String license = jsonObject.getString("drive_license");
+        String nationalID = jsonObject.getString("nationalID");
+        if(license.length() == 14 && nationalID.length() == 14)
+        {
+            jsonObject.append("status","Verified");
+        }
+        dbDriver.update(jsonObject,id);
         System.out.println("one driver Verified");
     }
 
@@ -55,22 +69,32 @@ public class AdminController implements AdminServices{
     @Override
     @PostMapping
     public void suspendAccountDriver( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
-//        JSONObject jsonObject = new JSONObject(username);
-//        dbDriver.update(jsonObject);
-//        System.out.println("one driver suspended");
-//        System.out.println(username);
+        JSONArray allDrivers = dbDriver.listAll();
+        JSONObject jsonObject = new JSONObject();
+        int id = 0;
+        for (int i=0;i<allDrivers.length();i++) {
+            if (allDrivers.getJSONObject(i).get("username").equals(username))
+                id =i;
+            break;
+        }
+        jsonObject.append("status","Suspended");
+        dbDriver.update(jsonObject,id);
     }
 
     @RequestMapping("suspendAccountClient/{username}")
     @Override
     @PostMapping
     public void suspendAccountClient( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
-//        Connection c1 = establish_connection();
-//        String query = " update client set status='Suspended' where  username='"+username+"'";
-//        PreparedStatement preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.executeUpdate();
-//        establish_connection().close();
-//        System.out.println("one Client suspended");
+        JSONArray allClients = dbClient.listAll();
+        JSONObject jsonObject = new JSONObject();
+        int id = 0;
+        for (int i=0;i<allClients.length();i++) {
+            if (allClients.getJSONObject(i).get("username").equals(username))
+                id =i;
+            break;
+        }
+        jsonObject.append("status","Suspended");
+        dbClient.update(jsonObject,id);
     }
 
     @RequestMapping("setDiscountArea")

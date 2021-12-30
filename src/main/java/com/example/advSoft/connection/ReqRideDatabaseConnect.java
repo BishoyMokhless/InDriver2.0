@@ -57,7 +57,7 @@ public class ReqRideDatabaseConnect implements DataBaseConnect{
     }
 
     @Override
-    public void update(JSONObject reqRide) {
+    public void update(JSONObject reqRide,int id) {
 
 
 

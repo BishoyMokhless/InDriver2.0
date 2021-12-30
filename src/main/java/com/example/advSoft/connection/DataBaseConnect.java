@@ -14,7 +14,7 @@ public interface DataBaseConnect {
     public void delete(int id);
     public JSONObject get(int id) throws SQLException, ClassNotFoundException;
     public JSONArray listAll() throws SQLException, ClassNotFoundException;
-    public void update(JSONObject temp) throws SQLException, ClassNotFoundException;
+    public void update(JSONObject temp , int id) throws SQLException, ClassNotFoundException;
 
 
 }
