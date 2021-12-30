@@ -1,36 +1,43 @@
 package com.example.advSoft.Admin;
 
+import com.example.advSoft.connection.AdminDatabaseConnect;
+import com.example.advSoft.connection.ClientDatabaseConnect;
+import com.example.advSoft.connection.DataBaseConnect;
+import com.example.advSoft.connection.DriverDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.advSoft.connection.DataBaseConnect.establish_connection;
 
 @RequestMapping("/api/admin")
 @RestController
-public class AdminController  extends Admin implements AdminServices {
-    @Autowired
+public class AdminController implements AdminServices{
+    DataBaseConnect dbAdmin = new AdminDatabaseConnect();
+    DataBaseConnect dbDriver = new DriverDatabaseConnect();
+    DataBaseConnect dbClient = new ClientDatabaseConnect();
+
+
     @RequestMapping("listPendingDrivers")
     @Override
     @GetMapping
-    public String listPendingDrivers() throws SQLException, ClassNotFoundException {
-        Connection c1 = establish_connection();
-        JSONArray arr = new JSONArray();
-        Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from driver where  status ='UnVerified' ");
-        while(rs.next())
+    public List<String> listPendingDrivers() throws SQLException, ClassNotFoundException {
+        JSONArray allDrivers = dbDriver.listAll();
+        JSONObject driver;
+        List<String> allPendingDrivers = new ArrayList<>();
+        for (int i=0;i<allDrivers.length();i++)
         {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("username",rs.getString("username"));
-            jsonObject.put("email",rs.getString("email"));
-            jsonObject.put("mobileNumber",rs.getString("mobileNumber"));
-            jsonObject.put("nationalID",rs.getString("nationalID"));
-            jsonObject.put("drive_license",rs.getString("drive_license"));
-            jsonObject.put("status",rs.getString("status"));
-            arr.put(jsonObject);
+            driver = allDrivers.getJSONObject(i);
+            if (driver.get("status").equals("Unverified"))
+            {
+                allPendingDrivers.add(driver.toString());
+            }
         }
-        return arr.toString();
+        return allPendingDrivers;
     }
 
     @RequestMapping("verifyDriver")

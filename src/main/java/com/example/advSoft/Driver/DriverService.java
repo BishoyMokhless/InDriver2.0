@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.sql.SQLException;
 
 public interface DriverService {
+    Driver driver = new Driver();
 
     public String listAllRequestedRides(@PathVariable("DriverName") String DriverName) throws SQLException, ClassNotFoundException;
     public String listAllRides(@PathVariable("username") String drivername) throws SQLException, ClassNotFoundException;

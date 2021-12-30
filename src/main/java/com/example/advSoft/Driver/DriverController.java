@@ -1,6 +1,9 @@
 package com.example.advSoft.Driver;
 
 import com.example.advSoft.User.User;
+import com.example.advSoft.connection.ClientDatabaseConnect;
+import com.example.advSoft.connection.DataBaseConnect;
+import com.example.advSoft.connection.DriverDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,8 @@ import static com.example.advSoft.connection.DataBaseConnect.establish_connectio
 
 @RequestMapping("/api/driver")
 @RestController
-public class DriverController extends Driver implements DriverService , User {
+public class DriverController implements DriverService ,User{
+    DataBaseConnect dbDriver = new ClientDatabaseConnect();
     @Autowired
     @Override
     @GetMapping

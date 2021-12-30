@@ -2,6 +2,8 @@ package com.example.advSoft.Client;
 
  import com.example.advSoft.Discount.*;
  import com.example.advSoft.User.User;
+ import com.example.advSoft.connection.ClientDatabaseConnect;
+ import com.example.advSoft.connection.DataBaseConnect;
  import org.json.JSONArray;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +21,10 @@ public class ClientController  extends Client implements  ClientService , User {
     @GetMapping
 
     public String getAll() throws SQLException, ClassNotFoundException {
-        Connection c1 = establish_connection();
         JSONArray arr = new JSONArray();
-        Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from client ");
-        while(rs.next())
-        {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("username",rs.getString("username"));
-            jsonObject.put("email",rs.getString("email"));
-            jsonObject.put("pass",rs.getString("pass"));
-            jsonObject.put("mobileNumber",rs.getString("mobileNumber"));
-             jsonObject.put("status",rs.getString("status"));
-            arr.put(jsonObject);
-         }
+        arr = dbClient.listAll();
         return arr.toString();
     }
-
-    @Override
     @PostMapping
     public void register( @RequestBody String person) throws SQLException, ClassNotFoundException, SQLException {
         JSONObject jsonObject = new JSONObject(person);
@@ -58,8 +46,8 @@ public class ClientController  extends Client implements  ClientService , User {
     @Override
     @PostMapping
     public String login(String person) throws SQLException, ClassNotFoundException, SQLException {
-        Connection c1 = establish_connection();
-        JSONArray arr = new JSONArray();
+
+        JSONArray allClients = new JSONArray();
         JSONObject jsonObject = new JSONObject(person);
         Statement statement = establish_connection().createStatement();
         ResultSet rs = statement.executeQuery("select *  from client where username='"+ (String) jsonObject.get("username") +"' and pass='"+ (String) jsonObject.get("pass") + "'" );
@@ -74,7 +62,7 @@ public class ClientController  extends Client implements  ClientService , User {
             arr.put(newjsonObject);
         }
 
-        return arr.toString();
+        return jsonObject.toString();
     }
 
     @RequestMapping("RequestRide")

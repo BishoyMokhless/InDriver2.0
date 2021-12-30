@@ -1,15 +1,23 @@
 package com.example.advSoft.connection;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public interface DataBaseConnect {
-    public static Connection establish_connection() throws SQLException, ClassNotFoundException
-    {
-        String url="jdbc:mysql://localhost:3306/sprint2";
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection= DriverManager.getConnection(url,"root","root");
-        return connection;
-    }
+    public Connection establish_connection() throws SQLException, ClassNotFoundException;
+    public void set(JSONObject object) throws SQLException, ClassNotFoundException;
+    public void delete(int id);
+    public JSONObject get(int id);
+    public JSONArray listAll() throws SQLException, ClassNotFoundException;
+    public void update(Object temp);
+
+
+
+
+
 }
