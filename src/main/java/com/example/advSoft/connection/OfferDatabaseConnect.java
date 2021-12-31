@@ -89,8 +89,7 @@ public class OfferDatabaseConnect implements IOfferDatabaseConnect{
     public void update(JSONObject offer,int id) throws SQLException, ClassNotFoundException {
         System.out.println("ana gwa: " + offer);
         String query = " update  offer SET (driverName, offerTime, price, requestedrides_id, accepted, accepted_time) WHERE ('id = "+id+"')";
-        String query = "UPDATE offer SET driverName ='" + offer.get("driverName") + "', offerTime = '" +  offer.get("offerTime") + "', price ='\" + offer.get(\"driverName\") = value2, ...\n" +
-                "WHERE condition; "
+        String query = "UPDATE offer SET driverName ='" + offer.get("driverName") + "', offerTime = '" +  offer.get("offerTime")+ "'";
 
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString(1, (String) offer.get("driverName"));
