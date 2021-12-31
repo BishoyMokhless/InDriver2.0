@@ -6,10 +6,13 @@ package com.example.advSoft.Client;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.web.bind.annotation.*;
+
+ import java.math.BigDecimal;
  import java.sql.*;
  import java.time.LocalDateTime;
  import java.time.format.DateTimeFormatter;
  import java.util.ArrayList;
+ import java.util.Collection;
  import java.util.List;
 
 @RequestMapping("/api/client")
@@ -76,29 +79,38 @@ public class ClientController  implements  ClientService , UserServices {
         JSONObject offer = new JSONObject();
         JSONObject reqride = new JSONObject();
         JSONObject ride = new JSONObject();
+
         offer = dbOffer.get(id);
         System.out.println(offer.get("requestedrides_id").toString());
         String temp = offer.get("requestedrides_id").toString();
         int reqId = Integer.parseInt(temp);
         offer.put("accepted", 1);
         offer.put("accepted_time", dtf.format(now));
-        //System.out.println(offer.get(""));
-        dbOffer.update(offer, id);
+         dbOffer.update(offer, id);
 
-        /*reqride = dbReqRide.get(reqId);
-        reqride.append("accepted", 1);
+        reqride = dbReqRide.get(reqId);
+
+        reqride.put("accepted", 1);
+        Double discount_value=checkDiscount((String) reqride.get("clientName"));
         dbReqRide.update(reqride, reqId);
         ride.put("id", id);
-        dbRide.set(ride);*/
+        float price = BigDecimal.valueOf(offer.getDouble("price")).floatValue();
+
+
+
+        ride.put("discount_value",discount_value*100);
+        ride.put("discount_percent", discount_value);
+        Double price_after_discount=price-price*discount_value;
+        ride.put("price_after_discount",price_after_discount);
+        dbRide.set(ride);
     }
 
     @RequestMapping("checkDiscount/{ClientName}")
     @Override
     @GetMapping
-    public String checkDiscount(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException
+    public Double checkDiscount(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException
     {
-        JSONArray arrDiscounts = new JSONArray();
-        List<Double> discounts = new ArrayList<Double>();
+         List<Double> discounts = new ArrayList<Double>();
         JSONArray arr = new JSONArray();
         Discount discount = new BirthdayDiscount();
         discounts.add(discount.getDiscount(ClientName));
@@ -108,13 +120,20 @@ public class ClientController  implements  ClientService , UserServices {
         discounts.add(discount.getDiscount(ClientName));
         discount = new FirstRideDiscount();
         discounts.add(discount.getDiscount(ClientName));
+        discount = new OfficialHolidays();
+        discounts.add(discount.getDiscount(ClientName));
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("Birthday Discount", discounts.get(0));
-        jsonObject.put("Nclients Discount", discounts.get(1));
+        jsonObject.put("Number of clients Discount", discounts.get(1));
         jsonObject.put("Area Discount", discounts.get(2));
         jsonObject.put("First time Discount", discounts.get(3));
+        jsonObject.put("Holiday Discount", discounts.get(4));
         arr.put(jsonObject);
-        return arr.toString();
+        System.out.println(arr.toString());
+        Double total=(Double) discounts.get(0)+ (Double)discounts.get(1)+(Double)discounts.get(2)+(Double)discounts.get(3)+(Double)discounts.get(4);
+        System.out.println(total);
+         return  total;
     }
+
 }

@@ -1,10 +1,7 @@
 package com.example.advSoft.Admin;
 
 import com.example.advSoft.Driver.Driver;
-import com.example.advSoft.connection.AdminDatabaseConnect;
-import com.example.advSoft.connection.ClientDatabaseConnect;
-import com.example.advSoft.connection.DataBaseConnect;
-import com.example.advSoft.connection.DriverDatabaseConnect;
+import com.example.advSoft.connection.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,17 +98,17 @@ public class AdminController implements AdminServices{
     @Override
     @PostMapping
     public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException {
-//        System.out.println(areas);
-//        Connection c1 = establish_connection();
-//        JSONArray jsonArray = new JSONArray(areas);
-//        for (Object jsonOb : jsonArray)
-//        {
-//            Statement statement = establish_connection().createStatement();
-//            String query = " insert into DiscountAreas (area) values (?)";
-//            PreparedStatement preparedStmt = c1.prepareStatement(query);
-//            preparedStmt.setString (1, (String) jsonOb);
-//            preparedStmt.executeUpdate();
-//        }
-//        System.out.println("areas added");
+
+               System.out.println(areas);
+               DataBaseConnect DB=new AreaDiscountDatabseConnect();
+               JSONArray arr=new JSONArray(areas);
+               System.out.println(arr);
+               for (int i=0;i<arr.length();i++)
+               {
+                   JSONObject object=new JSONObject();
+                   object.put("area",arr.get(i));
+                   DB.set(object);
+               }
+
     }
 }

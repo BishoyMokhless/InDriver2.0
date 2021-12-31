@@ -41,8 +41,21 @@ public class ReqRideDatabaseConnect implements IReqRideDatabaseConnect{
     }
 
     @Override
-    public JSONObject get(int id) {
-        return null;
+    public JSONObject get(int id) throws SQLException, ClassNotFoundException {
+        JSONObject ride = new JSONObject();
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select *  from requestedrides where ( id ='"+id+"')");
+        while(rs.next())
+        {
+            ride.put("id",rs.getInt("id"));
+            ride.put("clientName",rs.getString("clientName"));
+            ride.put("source",rs.getString("source"));
+            ride.put("destination",rs.getString("destination"));
+            ride.put("clients_number",rs.getInt("clients_number"));
+            ride.put("requestedride_time",rs.getTimestamp("requestedride_time"));
+
+        }
+        return ride;
     }
 
     @Override
@@ -66,9 +79,16 @@ public class ReqRideDatabaseConnect implements IReqRideDatabaseConnect{
     }
 
     @Override
-    public void update(JSONObject reqRide,int id) {
+    public void update(JSONObject reqRide,int id) throws SQLException, ClassNotFoundException {
 
-
+        System.out.println("ac: " + reqRide.get("accepted"));
+        Integer booll=(Integer)reqRide.get("accepted");
+        System.out.println("booll: " + booll);
+        String query = "UPDATE requestedrides SET clientName ='"+reqRide.get("clientName")+"'" + ", source ='"+reqRide.get("source")+"'" + ", destination ='"+reqRide.get("destination")+"'" + ", clients_number ='"+reqRide.get("clients_number")+"'" + ", accepted ="+ booll + ", requestedride_time ='" +reqRide.get("requestedride_time")+"' where id="+id+" ";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("one requestedride updated");
 
     }
     public String listrequestedToDriver(String driverName) throws SQLException, ClassNotFoundException

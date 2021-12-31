@@ -87,17 +87,10 @@ public class OfferDatabaseConnect implements IOfferDatabaseConnect{
     //not Sure if the update query work
     @Override
     public void update(JSONObject offer,int id) throws SQLException, ClassNotFoundException {
-        System.out.println("ana gwa: " + offer);
-        String query = " update  offer SET (driverName, offerTime, price, requestedrides_id, accepted, accepted_time) WHERE ('id = "+id+"')";
-        String query = "UPDATE offer SET driverName ='" + offer.get("driverName") + "', offerTime = '" +  offer.get("offerTime")+ "'";
 
+         Integer booll=(Integer)offer.get("accepted");
+         String query = "UPDATE offer SET driverName ='"+offer.get("driverName")+"'" + ", offerTime ='"+offer.get("offerTime")+"'" + ", price ='"+offer.get("price")+"'" + ", requestedrides_id ='"+offer.get("requestedrides_id")+"'" + ", accepted ="+ booll + ", accepted_time ='" +offer.get("accepted_time")+"' where id="+id+" ";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString(1, (String) offer.get("driverName"));
-        preparedStmt.setString(2, (String) offer.get("offerTime"));
-        preparedStmt.setString(3, (String) offer.get("price"));
-        preparedStmt.setInt (4, (Integer)offer.get("requestedrides_id)"));
-        preparedStmt.setString (5, (String) offer.get("accepted"));
-        preparedStmt.setString (6, (String) offer.get("accepted_time"));
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one offer updated");

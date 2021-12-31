@@ -18,15 +18,14 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
 
     @Override
     public void set(JSONObject ride) throws SQLException, ClassNotFoundException {
-        Integer clientsNumber =Integer.parseInt((String) ride.get("clients_number"));
-        String query = " insert into ride (id, arrive_source_time, arrive_destination_time,discount_value,discount_percent,price_after_discount) values (?,?,?,?,?,?)";
+         String query = " insert into ride (id,discount_value,discount_percent,price_after_discount) values (?,?,?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString (1, (String) ride.get("id"));
-        preparedStmt.setString (2, (String) ride.get("arrive_source_time"));
-        preparedStmt.setString (3, (String) ride.get("arrive_destination_time"));
-        preparedStmt.setString (4, (String) ride.get("discount_value"));
-        preparedStmt.setString (5, (String) ride.get("discount_percent"));
-        preparedStmt.setString (6, (String) ride.get("price_after_discount"));
+        preparedStmt.setInt (1, (Integer) ride.get("id"));
+        preparedStmt.setDouble (2, (Double) ride.get("discount_value"));
+        preparedStmt.setDouble (3, (Double) ride.get("discount_percent"));
+        preparedStmt.setDouble (4, (Double) ride.get("price_after_discount"));
+        preparedStmt.executeUpdate();
+        establish_connection().close();
         System.out.println("The Ride is added successfully");
 
     }
