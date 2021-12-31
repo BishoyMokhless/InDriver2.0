@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.sql.*;
 
-public class FavAreas implements DataBaseConnect{
+public class FavAreasDatabaseConnect implements DataBaseConnect{
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";
@@ -18,8 +18,8 @@ public class FavAreas implements DataBaseConnect{
     public void set(JSONObject FavArea) throws SQLException, ClassNotFoundException {
         String query = " insert into favarea (area,driverName) values (?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString (1,  FavArea.toString());
-        preparedStmt.setString (2,  "driverName");
+        preparedStmt.setString (1,  FavArea.getString("area"));
+        preparedStmt.setString (2,  FavArea.getString("driverName"));
         preparedStmt.executeUpdate();
         establish_connection().close();
     }

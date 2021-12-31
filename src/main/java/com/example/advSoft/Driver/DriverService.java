@@ -8,8 +8,8 @@ public interface DriverService {
     Driver driver = new Driver();
 
     public String listAllRequestedRides(@PathVariable("DriverName") String DriverName) throws SQLException, ClassNotFoundException;
-    public String listAllRides(@PathVariable("username") String drivername) throws SQLException, ClassNotFoundException;
-    public void FavAreas( @RequestBody String area ,@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
+    public String listAllDriverRides(@PathVariable("username") String drivername) throws SQLException, ClassNotFoundException;
+    public void setFavAreas( @RequestBody String area ,@PathVariable("driverName") String driverName) throws SQLException, ClassNotFoundException;
     public void sendOffer(@PathVariable("id") int id, @RequestBody  String req) throws SQLException, ClassNotFoundException;
     public void startTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException;
     public void endTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException;

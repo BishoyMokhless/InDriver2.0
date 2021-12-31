@@ -26,12 +26,10 @@ public class ClientDatabaseConnect implements IClientDatabaseConnect {
         preparedStmt.setString (3, (String) Client.get("pass"));
         preparedStmt.setString (4, (String) Client.get("mobileNumber"));
         preparedStmt.setString (5, "UnVerified");
-        preparedStmt.setString (6, "birthdate");
-
+        preparedStmt.setString (6, (String) Client.get("birthdate"));
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one Client created");
-
     }
 
     @Override

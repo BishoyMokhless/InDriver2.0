@@ -2,12 +2,16 @@ package com.example.advSoft.connection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.auditing.CurrentDateTimeProvider;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfferDatabaseConnect implements DataBaseConnect{
+public class OfferDatabaseConnect implements IOfferDatabaseConnect{
 
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
@@ -19,16 +23,20 @@ public class OfferDatabaseConnect implements DataBaseConnect{
     //TEST REQUIRED
     @Override
     public void set(JSONObject offer) throws SQLException, ClassNotFoundException {
-        String query = " insert into offer (driverName,ReqRID,price,accepted) values (?,?,?,?)";
+        float price = BigDecimal.valueOf(offer.getDouble("price")).floatValue();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String query = " insert into offer (driverName, offerTime, price, requestedrides_id, accepted, accepted_time) values (?,?,?,?,?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString(1, (String) offer.get("driverName"));
-        preparedStmt.setString (2, (String) offer.get("ReqRID)"));
-        preparedStmt.setString (3, (String) offer.get("offerTime)"));
-        preparedStmt.setString (4, (String) offer.get("price"));
-        preparedStmt.setString (5, (String) offer.get("accepted"));
+        preparedStmt.setString(2, dtf.format(now).toString());
+        preparedStmt.setFloat(3, price);
+        preparedStmt.setInt (4, (Integer)offer.get("requestedrides_id"));
+        preparedStmt.setInt(5, 0);
+        preparedStmt.setString (6, null);
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("one offer created successfully");
+        System.out.println("The Offer created successfully");
     }
 
     //TEST REQUIRED
@@ -50,7 +58,7 @@ public class OfferDatabaseConnect implements DataBaseConnect{
         {
             offer.put("driverName",rs.getString("driverName"));
             offer.put("id",rs.getString("id"));
-            offer.put("ReqRID",rs.getString("ReqRID"));
+            offer.put("requestedrides_id",rs.getString("requestedrides_id"));
             offer.put("offerTime",rs.getString("offerTime"));
             offer.put("price",rs.getString("price"));
         }
@@ -67,7 +75,7 @@ public class OfferDatabaseConnect implements DataBaseConnect{
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("driverName",rs.getString("driverName"));
                 jsonObject.put("id",rs.getString("id"));
-                jsonObject.put("ReqRID",rs.getString("ReqRID"));
+                jsonObject.put("requestedrides_id",rs.getString("requestedrides_id"));
                 jsonObject.put("offerTime",rs.getString("offerTime"));
                 jsonObject.put("price",rs.getString("price"));
                 allOffers.put(jsonObject);
@@ -79,16 +87,42 @@ public class OfferDatabaseConnect implements DataBaseConnect{
     //not Sure if the update query work
     @Override
     public void update(JSONObject offer,int id) throws SQLException, ClassNotFoundException {
+        System.out.println("ana gwa: " + offer);
+        String query = " update  offer SET (driverName, offerTime, price, requestedrides_id, accepted, accepted_time) WHERE ('id = "+id+"')";
+        String query = "UPDATE offer SET driverName ='" + offer.get("driverName") + "', offerTime = '" +  offer.get("offerTime") + "', price ='\" + offer.get(\"driverName\") = value2, ...\n" +
+                "WHERE condition; "
 
-        String query = " update  offer SET (driverName,ReqRID,price,accepted) values (?,?,?,?) WHERE ('id = "+id+"')";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString(1, (String) offer.get("driverName"));
-        preparedStmt.setString (2, (String) offer.get("ReqRID)"));
-        preparedStmt.setString (3, (String) offer.get("price"));
-        preparedStmt.setString (4, (String) offer.get("accepted"));
+        preparedStmt.setString(2, (String) offer.get("offerTime"));
+        preparedStmt.setString(3, (String) offer.get("price"));
+        preparedStmt.setInt (4, (Integer)offer.get("requestedrides_id)"));
+        preparedStmt.setString (5, (String) offer.get("accepted"));
+        preparedStmt.setString (6, (String) offer.get("accepted_time"));
         preparedStmt.executeUpdate();
         establish_connection().close();
         System.out.println("one offer updated");
+    }
+
+    @Override
+    public String viewOffersOfClient(String clientName) throws SQLException, ClassNotFoundException {
+        JSONObject offer = new JSONObject();
+        JSONArray offers = new JSONArray();
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("SELECT *  FROM requestedrides INNER JOIN offer WHERE requestedrides.clientName = '" + clientName + "' and offer.accepted = 0");
+        while(rs.next())
+        {
+            offer.put("id",rs.getString("offer.id"));
+            offer.put("source",rs.getString("source"));
+            offer.put("destination",rs.getString("destination"));
+            offer.put("clients_number",rs.getString("clients_number"));
+            offer.put("clientName",rs.getString("clientName"));
+            offer.put("driverName",rs.getString("driverName"));
+            offer.put("price",rs.getString("price"));
+            offer.put("offerTime",rs.getString("offerTime"));
+            offers.put(offer);
+        }
+        return offers.toString();
     }
 
 }

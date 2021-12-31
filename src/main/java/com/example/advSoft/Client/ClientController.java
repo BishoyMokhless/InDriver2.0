@@ -7,6 +7,8 @@ package com.example.advSoft.Client;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.web.bind.annotation.*;
  import java.sql.*;
+ import java.time.LocalDateTime;
+ import java.time.format.DateTimeFormatter;
  import java.util.ArrayList;
  import java.util.List;
 
@@ -14,14 +16,16 @@ package com.example.advSoft.Client;
 @RestController
 public class ClientController  implements  ClientService , UserServices {
     IClientDatabaseConnect dbClient = new ClientDatabaseConnect();
-    DataBaseConnect dbOffer = new OfferDatabaseConnect();
-    DataBaseConnect dbReqRide = new ReqRideDatabaseConnect();
+    IOfferDatabaseConnect dbOffer = new OfferDatabaseConnect();
+    IReqRideDatabaseConnect dbReqRide = new ReqRideDatabaseConnect();
+    IRideDatabaseConnect dbRide = new RideDatabaseConnect();
 
     @Autowired
     ClientController(){
 
     }
 
+    //TEST REQUIRED
     @Override
     @GetMapping
     public String getAll() throws SQLException, ClassNotFoundException {
@@ -29,6 +33,9 @@ public class ClientController  implements  ClientService , UserServices {
         allClients = dbClient.listAll();
         return allClients.toString();
     }
+
+    @RequestMapping("register")
+    @Override
     @PostMapping
     public void register( @RequestBody String person) throws  ClassNotFoundException, SQLException {
         JSONObject jsonObject = new JSONObject(person);
@@ -52,50 +59,37 @@ public class ClientController  implements  ClientService , UserServices {
         System.out.println("one request created");
     }
 
-    @RequestMapping("viewOffers/{ClientName}")
+    @RequestMapping("viewOffers/{clientName}")
+    @Override
     @GetMapping
-    public String viewOffers(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException {
-        JSONArray allOffers;
-        allOffers = dbOffer.listAll();
-        JSONArray allClientOffers= new JSONArray();
-        for (int i =0; i<allOffers.length();i++) {
-            JSONObject temp = allOffers.getJSONObject(i);
-            if(temp.get("ClientName").equals(ClientName))
-            {
-                allClientOffers.put(temp);
-            }
-        }
-        return allClientOffers.toString();
+    public String viewOffers(@PathVariable("clientName") String clientName) throws SQLException, ClassNotFoundException {
+        return dbOffer.viewOffersOfClient(clientName);
     }
 
     @RequestMapping("acceptOffer/{id}")
+    @Override
     @PostMapping
-    public void acceptOffer(@PathVariable("id") String id) throws SQLException, ClassNotFoundException
+    public void acceptOffer(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
     {
-//         JSONArray arrOffers = new JSONArray();
-//         JSONArray arr = new JSONArray();
-//        List<String> Ids = new ArrayList<String>();
-//        Connection c1 = establish_connection();
-//        String query = "update offer set accepted=1 where id ="+id+" ";
-//        PreparedStatement preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.executeUpdate();
-//        String reqId="";
-//        Statement statement = establish_connection().createStatement();
-//        ResultSet rs = statement.executeQuery("select * from offer where  id='"+id+"'");
-//        while(rs.next())
-//        {
-//            reqId=rs.getString("ReqRID");
-//        }
-//        query = "update requestedrides set accepted=1 where id ="+reqId+" ";
-//        preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.executeUpdate();
-//         c1 = establish_connection();
-//         query = " insert into ride (offer_id) values (?)";
-//         preparedStmt = c1.prepareStatement(query);
-//        preparedStmt.setString (1, id);
-//        preparedStmt.executeUpdate();
-//        establish_connection().close();
-//        System.out.println("one accepted Offer ");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        JSONObject offer = new JSONObject();
+        JSONObject reqride = new JSONObject();
+        JSONObject ride = new JSONObject();
+        offer = dbOffer.get(id);
+        System.out.println(offer.get("requestedrides_id").toString());
+        String temp = offer.get("requestedrides_id").toString();
+        int reqId = Integer.parseInt(temp);
+        offer.put("accepted", 1);
+        offer.put("accepted_time", dtf.format(now));
+        //System.out.println(offer.get(""));
+        dbOffer.update(offer, id);
+
+        /*reqride = dbReqRide.get(reqId);
+        reqride.append("accepted", 1);
+        dbReqRide.update(reqride, reqId);
+        ride.put("id", id);
+        dbRide.set(ride);*/
     }
 
     @RequestMapping("checkDiscount/{ClientName}")

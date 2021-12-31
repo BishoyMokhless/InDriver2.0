@@ -82,12 +82,11 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
 
     public JSONObject login(String person) throws SQLException, ClassNotFoundException {
         JSONObject jsonObject = new JSONObject(person);
-        JSONObject newjsonObject = null;
+        JSONObject newjsonObject = new JSONObject();
         Statement statement = establish_connection().createStatement();
         ResultSet rs = statement.executeQuery("select *  from driver where username ='" + jsonObject.get("username") +"' and pass = '" +  jsonObject.get("pass") + "'");
         if(rs.next())
         {
-            newjsonObject = new JSONObject();
             newjsonObject.put("username",rs.getString("username"));
             newjsonObject.put("pass",rs.getString("pass"));
             newjsonObject.put("email",rs.getString("email"));
