@@ -1,11 +1,13 @@
 package com.example.advSoft.Client;
 
+import com.example.advSoft.connection.DataBaseConnect;
+import com.example.advSoft.connection.ILoginDataBaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
 
-public class ClientDatabaseConnect implements IClientDatabaseConnect {
+public class ClientDatabaseConnect implements ILoginDataBaseConnect, DataBaseConnect {
 
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {

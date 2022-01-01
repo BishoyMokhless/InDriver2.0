@@ -10,6 +10,8 @@ package com.example.advSoft.Client;
  import com.example.advSoft.Ride.RideController;
  import com.example.advSoft.Ride.RideService;
  import com.example.advSoft.User.UserServices;
+ import com.example.advSoft.connection.DataBaseConnect;
+ import com.example.advSoft.connection.ILoginDataBaseConnect;
  import org.json.JSONArray;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,11 @@ package com.example.advSoft.Client;
 @RequestMapping("/api/client")
 @RestController
 public class ClientController  implements  ClientService , UserServices {
-    IClientDatabaseConnect dbClient = new ClientDatabaseConnect();
+    DataBaseConnect dbClient = new ClientDatabaseConnect();
+    ILoginDataBaseConnect dbLogin = new ClientDatabaseConnect();
     OfferService offer = new OfferController();
     RideService ride = new RideController();
+    
     @Autowired
     public ClientController(){
 
@@ -51,7 +55,7 @@ public class ClientController  implements  ClientService , UserServices {
     @Override
     @PostMapping
     public String login(String person) throws  ClassNotFoundException, SQLException {
-        JSONObject jsonObject =   dbClient.login(person);
+        JSONObject jsonObject =   dbLogin.login(person);
         return jsonObject.toString();
     }
 

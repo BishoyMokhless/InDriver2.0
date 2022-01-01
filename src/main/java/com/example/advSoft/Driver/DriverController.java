@@ -22,7 +22,8 @@ import java.sql.SQLException;
 @RequestMapping("/api/driver")
 @RestController
 public class DriverController implements DriverService , UserServices {
-    IDriverDatabaseConnect dbDriver = new DriverDatabaseConnect();
+    DataBaseConnect dbDriver = new DriverDatabaseConnect();
+    ILoginDataBaseConnect dbLogin = new DriverDatabaseConnect();
     IRideDatabaseConnect dbRide = new RideDatabaseConnect();
     IReqRideDatabaseConnect dbReqRide = new ReqRideDatabaseConnect();
     DataBaseConnect dbFavAreas = new FavAreasDatabaseConnect();
@@ -54,7 +55,7 @@ public class DriverController implements DriverService , UserServices {
     @Override
     @PostMapping
     public String login(String person) throws SQLException, ClassNotFoundException, SQLException {
-        JSONObject jsonObject = dbDriver.login(person);
+        JSONObject jsonObject = dbLogin.login(person);
         return jsonObject.toString();
     }
 
