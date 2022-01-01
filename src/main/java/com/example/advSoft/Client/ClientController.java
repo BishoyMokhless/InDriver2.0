@@ -112,16 +112,16 @@ public class ClientController  implements  ClientService , UserServices {
     {
          List<Double> discounts = new ArrayList<Double>();
         JSONArray arr = new JSONArray();
-        Discount discount = new BirthdayDiscount();
-        discounts.add(discount.getDiscount(ClientName));
-        discount = new NclientsDiscount();
-        discounts.add(discount.getDiscount(ClientName));
-        discount = new AreaDiscount();
-        discounts.add(discount.getDiscount(ClientName));
-        discount = new FirstRideDiscount();
-        discounts.add(discount.getDiscount(ClientName));
-        discount = new OfficialHolidays();
-        discounts.add(discount.getDiscount(ClientName));
+        Discount discount1 = new BirthdayDiscount();
+        discounts.add(discount1.getDiscount(ClientName));
+        Discount discount2 = new NclientsDiscount();
+        discounts.add(discount2.getDiscount(ClientName));
+        Discount discount3 = new AreaDiscount();
+        discounts.add(discount3.getDiscount(ClientName));
+        Discount discount4 = new FirstRideDiscount();
+        discounts.add(discount4.getDiscount(ClientName));
+        Discount discount5 = new OfficialHolidays();
+        discounts.add(discount5.getDiscount(ClientName));
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("Birthday Discount", discounts.get(0));
