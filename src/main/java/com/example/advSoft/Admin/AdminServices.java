@@ -8,10 +8,10 @@ import java.util.List;
 @Service
 public interface AdminServices {
     Admin admin = new Admin();
-    public void verifyDriverRegistration(@RequestBody String person) throws SQLException, ClassNotFoundException;
-    public List<String> listPendingDrivers() throws SQLException, ClassNotFoundException;
-    public void suspendAccountClient(@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
-    public void suspendAccountDriver(@PathVariable("username") String username) throws SQLException, ClassNotFoundException;
+    public void verifyDriverRegistration(@RequestBody String req) throws SQLException, ClassNotFoundException;
+    public String listPendingDrivers() throws SQLException, ClassNotFoundException;
+    public void suspendAccountClient(@RequestBody String req) throws SQLException, ClassNotFoundException;
+    public void suspendAccountDriver(@RequestBody String req) throws SQLException, ClassNotFoundException;
     public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException;
 
 }

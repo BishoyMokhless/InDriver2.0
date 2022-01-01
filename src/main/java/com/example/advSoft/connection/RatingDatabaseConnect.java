@@ -3,6 +3,7 @@ package com.example.advSoft.connection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class RatingDatabaseConnect implements DataBaseConnect{
@@ -15,14 +16,14 @@ public class RatingDatabaseConnect implements DataBaseConnect{
     }
     @Override
     public void set(JSONObject rate) throws SQLException, ClassNotFoundException {
-        String query = " insert into rate (clientName,driverName,rate) values (?,?,?)";
+        float rate_float = BigDecimal.valueOf(rate.getDouble("rate")).floatValue();
+        String query = " insert into rate (id,rate) values (?,?)";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString (1, (String) rate.get("clientName"));
-        preparedStmt.setString (2, (String) rate.get("driverName"));
-        preparedStmt.setFloat (3, (Float) rate.get("rate"));
+        preparedStmt.setInt(1, (Integer) rate.get("id"));
+        preparedStmt.setFloat (2, rate_float);
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("one rate created");
+        System.out.println("one rate added");
     }
 
     @Override
@@ -48,14 +49,14 @@ public class RatingDatabaseConnect implements DataBaseConnect{
     public JSONArray listAll() throws SQLException, ClassNotFoundException {
         JSONArray allRates = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select *  from rate");
+        ResultSet rs = statement.executeQuery("select * from  rate INNER JOIN ride,offer,requestedrides");
         while(rs.next())
         {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("clientName",rs.getString("clientName"));
+            jsonObject.put("rate",rs.getString("rate"));
             jsonObject.put("driverName",rs.getString("driverName"));
-            jsonObject.put("rate",rs.getFloat("rate"));
-            allRates.put(jsonObject);
+             allRates.put(jsonObject);
         }
 
         return allRates;

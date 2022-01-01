@@ -50,6 +50,7 @@ public class ClientDatabaseConnect implements IClientDatabaseConnect {
         while(rs.next())
         {
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id",rs.getInt("id"));
             jsonObject.put("username",rs.getString("username"));
             jsonObject.put("pass",rs.getString("pass"));
             jsonObject.put("email",rs.getString("email"));
@@ -65,7 +66,7 @@ public class ClientDatabaseConnect implements IClientDatabaseConnect {
     @Override
     public void update(JSONObject Client, int id) throws SQLException, ClassNotFoundException {
 
-        String query = " update client set (username,email,pass,mobileNumber,status,birthdate) values (?,?,?,?,?,?) where  id='"+id+"'";
+        String query = "UPDATE client SET username =? , email =? , pass = ? , mobileNumber = ? , status = ? , birthdate = ? where id="+id+" ";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString (1, (String) Client.get("username"));
         preparedStmt.setString (2, (String) Client.get("email"));
@@ -75,6 +76,7 @@ public class ClientDatabaseConnect implements IClientDatabaseConnect {
         preparedStmt.setString (6, (String) Client.get("birthdate"));
         preparedStmt.executeUpdate();
         establish_connection().close();
+        System.out.println("one client updated");
     }
 
     @Override

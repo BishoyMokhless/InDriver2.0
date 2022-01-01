@@ -48,13 +48,13 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
         while(rs.next())
         {
             ride.put("id",rs.getInt("id"));
-            ride.put("arrive_source_time",rs.getDate("arrive_source_time"));
+            ride.put("arrive_source_time",rs.getTimestamp("arrive_source_time"));
             ride.put("arrive_destination_time",rs.getTimestamp("arrive_destination_time"));
             ride.put("discount_value",rs.getDouble("discount_value"));
             ride.put("discount_percent",rs.getDouble("discount_percent"));
             ride.put("price_after_discount",rs.getDouble("price_after_discount"));
         }
-        return ride;
+         return ride;
     }
 
     @Override
@@ -151,5 +151,37 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
         if(rs.next())
             return true;
         return false;
+    }
+
+    @Override
+    public Integer getRequstID(int RideID) throws SQLException, ClassNotFoundException {
+        Statement statement = establish_connection().createStatement();
+        JSONArray allRides = new JSONArray();
+        ResultSet rs = statement.executeQuery("select * from  requestedrides  INNER JOIN  ride,offer where ride.id="+RideID+" ");
+        if(rs.next())
+            return rs.getInt("requestedrides_id");
+        else
+            return -1;
+
+    }
+
+    @Override
+    public String getOffersWithReqID(int ReqID) throws SQLException, ClassNotFoundException {
+        JSONArray allRides = new JSONArray();
+        Statement statement = establish_connection().createStatement();
+        ResultSet rs = statement.executeQuery("select * from offer inner join requestedrides where offer.requestedrides_id="+ReqID+"");
+        while(rs.next())
+        {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("OfferID",rs.getInt("id"));
+            jsonObject.put("driverName",rs.getString("driverName"));
+            jsonObject.put("offerTime",rs.getTimestamp("offerTime"));
+            jsonObject.put("price",rs.getDouble("price"));
+            jsonObject.put("source",rs.getString("source"));
+            jsonObject.put("destination",rs.getString("destination"));
+            jsonObject.put("clientName",rs.getString("clientName"));
+            allRides.put(jsonObject);
+        }
+        return allRides.toString();
     }
 }

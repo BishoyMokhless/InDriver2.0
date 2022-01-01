@@ -40,7 +40,7 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
 
     @Override
     public JSONObject get(int id) {
-        return null;
+return  null;
     }
 
 
@@ -52,6 +52,7 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
         while(rs.next())
         {
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id",rs.getInt("id"));
             jsonObject.put("username",rs.getString("username"));
             jsonObject.put("pass",rs.getString("pass"));
             jsonObject.put("email",rs.getString("email"));
@@ -66,7 +67,8 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
 
     @Override
     public void update(JSONObject Driver,int id) throws SQLException, ClassNotFoundException {
-        String query = " update driver set(username,email,pass,mobileNumber,nationalID,drive_license,status) where  id='"+ id+"'";
+
+        String query = "UPDATE driver SET username =? , email =? , pass = ? , mobileNumber = ? , nationalID = ? , drive_license = ? , status= ?  where id="+id+" ";
         PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
         preparedStmt.setString (1, (String) Driver.get("username"));
         preparedStmt.setString (2, (String) Driver.get("email"));
@@ -77,7 +79,8 @@ public class DriverDatabaseConnect implements IDriverDatabaseConnect{
         preparedStmt.setString (7, (String) Driver.get("status"));
         preparedStmt.executeUpdate();
         establish_connection().close();
-        System.out.println("one driver created");
+        System.out.println("one Driver updated");
+
     }
 
     public JSONObject login(String person) throws SQLException, ClassNotFoundException {

@@ -25,73 +25,95 @@ public class AdminController implements AdminServices{
     @RequestMapping("listPendingDrivers")
     @Override
     @GetMapping
-    public List<String> listPendingDrivers() throws SQLException, ClassNotFoundException {
+    public String listPendingDrivers() throws SQLException, ClassNotFoundException {
         JSONArray allDrivers = dbDriver.listAll();
         JSONObject driver;
         List<String> allPendingDrivers = new ArrayList<>();
+
         for (int i=0;i<allDrivers.length();i++)
         {
             driver = allDrivers.getJSONObject(i);
-            if (driver.get("status").equals("Unverified"))
+            if (driver.get("status").equals("UnVerified"))
             {
                 allPendingDrivers.add(driver.toString());
             }
         }
-        return allPendingDrivers;
+        return allPendingDrivers.toString();
     }
 
     @RequestMapping("verifyDriver")
     @Override
     @PostMapping
-    public void verifyDriverRegistration(@RequestBody String person) throws SQLException, ClassNotFoundException {
+    public void verifyDriverRegistration(@RequestBody String req) throws SQLException, ClassNotFoundException {
         JSONArray allDrivers = dbDriver.listAll();
-        JSONObject jsonObject = new JSONObject(person);
+        JSONObject jsonObject = new JSONObject(req);
+
         int id = 0;
         for (int i=0;i<allDrivers.length();i++) {
-            if (allDrivers.getJSONObject(i).equals(jsonObject))
-                id = i;
-            break;
+            if (allDrivers.getJSONObject(i).get("username").equals(jsonObject.get("username")))
+            {
+                id = (int) allDrivers.getJSONObject(i).get("id");
+                jsonObject=allDrivers.getJSONObject(i);
+                break;
+            }
         }
         String license = jsonObject.getString("drive_license");
         String nationalID = jsonObject.getString("nationalID");
+
         if(license.length() == 14 && nationalID.length() == 14)
         {
-            jsonObject.append("status","Verified");
+            jsonObject.remove("status");
+
+            jsonObject.put("status","Verified");
         }
         dbDriver.update(jsonObject,id);
         System.out.println("one driver Verified");
+
     }
 
-    @RequestMapping("suspendAccountDriver/{username}")
+    @RequestMapping("suspendAccountDriver")
     @Override
     @PostMapping
-    public void suspendAccountDriver( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
+    public void suspendAccountDriver( @RequestBody String req) throws SQLException, ClassNotFoundException {
         JSONArray allDrivers = dbDriver.listAll();
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject(req);
+
         int id = 0;
         for (int i=0;i<allDrivers.length();i++) {
-            if (allDrivers.getJSONObject(i).get("username").equals(username))
-                id =i;
-            break;
+            if (allDrivers.getJSONObject(i).get("username").equals(jsonObject.get("username")))
+            {
+                id = (int) allDrivers.getJSONObject(i).get("id");
+                jsonObject=allDrivers.getJSONObject(i);
+                break;
+            }
         }
-        jsonObject.append("status","Suspended");
+        jsonObject.remove("status");
+        jsonObject.put("status","Suspended");
         dbDriver.update(jsonObject,id);
+        System.out.println("one driver Suspended");
+
     }
 
-    @RequestMapping("suspendAccountClient/{username}")
+    @RequestMapping("suspendAccountClient")
     @Override
     @PostMapping
-    public void suspendAccountClient( @PathVariable("username") String username) throws SQLException, ClassNotFoundException {
+    public void suspendAccountClient( @RequestBody  String req) throws SQLException, ClassNotFoundException {
         JSONArray allClients = dbClient.listAll();
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject(req);
+
         int id = 0;
         for (int i=0;i<allClients.length();i++) {
-            if (allClients.getJSONObject(i).get("username").equals(username))
-                id =i;
-            break;
+            if (allClients.getJSONObject(i).get("username").equals(jsonObject.get("username")))
+            {
+                id = (int) allClients.getJSONObject(i).get("id");
+                jsonObject=allClients.getJSONObject(i);
+                break;
+            }
         }
-        jsonObject.append("status","Suspended");
+        jsonObject.remove("status");
+        jsonObject.put("status","Suspended");
         dbClient.update(jsonObject,id);
+        System.out.println("one client Suspended");
     }
 
     @RequestMapping("setDiscountArea")
