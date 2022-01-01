@@ -1,4 +1,6 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Ride;
+
+import com.example.advSoft.connection.DataBaseConnect;
 
 import java.sql.SQLException;
 

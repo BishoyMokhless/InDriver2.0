@@ -1,11 +1,12 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Driver;
 
+import com.example.advSoft.connection.DataBaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
 
-public class FavAreasDatabaseConnect implements DataBaseConnect{
+public class FavAreasDatabaseConnect implements DataBaseConnect {
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";

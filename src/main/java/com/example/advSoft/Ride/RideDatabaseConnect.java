@@ -1,5 +1,6 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Ride;
 
+import com.example.advSoft.Ride.IRideDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -154,7 +155,7 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
     }
 
     @Override
-    public Integer getRequstID(int RideID) throws SQLException, ClassNotFoundException {
+    public Integer getRequestID(int RideID) throws SQLException, ClassNotFoundException {
         Statement statement = establish_connection().createStatement();
         JSONArray allRides = new JSONArray();
         ResultSet rs = statement.executeQuery("select * from  requestedrides  INNER JOIN  ride,offer where ride.id="+RideID+" ");

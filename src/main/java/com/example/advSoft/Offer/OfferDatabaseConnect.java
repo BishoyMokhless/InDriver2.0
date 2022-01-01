@@ -1,17 +1,15 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Offer;
 
+import com.example.advSoft.Offer.IOfferDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
-public class OfferDatabaseConnect implements IOfferDatabaseConnect{
+public class OfferDatabaseConnect implements IOfferDatabaseConnect {
 
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {

@@ -1,5 +1,6 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Admin;
 
+import com.example.advSoft.connection.DataBaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.sql.*;

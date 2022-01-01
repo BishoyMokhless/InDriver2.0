@@ -1,14 +1,11 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Driver;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import com.example.advSoft.Driver.Driver;
 
-public class DriverDatabaseConnect implements IDriverDatabaseConnect{
+public class DriverDatabaseConnect implements IDriverDatabaseConnect {
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";

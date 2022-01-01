@@ -1,6 +1,10 @@
 package com.example.advSoft.Admin;
 
-import com.example.advSoft.Driver.Driver;
+import com.example.advSoft.Client.ClientDatabaseConnect;
+import com.example.advSoft.Discount.AreaDiscount.AreaDiscountDatabseConnect;
+import com.example.advSoft.Driver.DriverDatabaseConnect;
+import com.example.advSoft.Ride.RideController;
+import com.example.advSoft.Ride.RideService;
 import com.example.advSoft.connection.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,9 +18,10 @@ import java.util.List;
 @RequestMapping("/api/admin")
 @RestController
 public class AdminController implements AdminServices{
-    DataBaseConnect dbAdmin = new AdminDatabaseConnect();
+
     DataBaseConnect dbDriver = new DriverDatabaseConnect();
     DataBaseConnect dbClient = new ClientDatabaseConnect();
+    RideService ride = new RideController();
     @Autowired
     AdminController(){
 
@@ -121,16 +126,50 @@ public class AdminController implements AdminServices{
     @PostMapping
     public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException {
 
-               System.out.println(areas);
-               DataBaseConnect DB=new AreaDiscountDatabseConnect();
-               JSONArray arr=new JSONArray(areas);
-               System.out.println(arr);
-               for (int i=0;i<arr.length();i++)
-               {
-                   JSONObject object=new JSONObject();
-                   object.put("area",arr.get(i));
-                   DB.set(object);
-               }
+        System.out.println(areas);
+        DataBaseConnect DB=new AreaDiscountDatabseConnect();
+        JSONArray arr=new JSONArray(areas);
+        System.out.println(arr);
+        for (int i=0;i<arr.length();i++)
+        {
+            JSONObject object=new JSONObject();
+            object.put("area",arr.get(i));
+            DB.set(object);
+        }
 
+    }
+
+    @RequestMapping("showDriverPrice/{rideID}")
+    @Override
+    @GetMapping
+    public String showDriverPrice(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException {
+
+
+        return ride.showDriverPrice(rideID);
+
+    }
+
+    @RequestMapping("showAcceptedPriceOffer/{rideID}")
+    @Override
+    @GetMapping
+    public String showAcceptedPriceOffer(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException {
+
+        return ride.showAcceptedPriceOffer(rideID);
+    }
+
+    @RequestMapping("driverArriveToSource/{rideID}")
+    @Override
+    @GetMapping
+    public String driverArriveToSource(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException {
+
+        return ride.driverArriveToSource(rideID);
+    }
+
+    @RequestMapping("driverArriveToDestination/{rideID}")
+    @Override
+    @GetMapping
+    public String driverArriveToDestination(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException {
+
+        return ride.driverArriveToDestination(rideID);
     }
 }

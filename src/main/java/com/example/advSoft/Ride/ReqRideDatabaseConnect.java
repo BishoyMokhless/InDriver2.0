@@ -1,5 +1,6 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Ride;
 
+import com.example.advSoft.Ride.IReqRideDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReqRideDatabaseConnect implements IReqRideDatabaseConnect{
+public class ReqRideDatabaseConnect implements IReqRideDatabaseConnect {
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";

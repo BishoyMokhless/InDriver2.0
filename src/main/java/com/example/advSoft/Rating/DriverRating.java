@@ -1,7 +1,6 @@
 package com.example.advSoft.Rating;
 
 import com.example.advSoft.connection.DataBaseConnect;
-import com.example.advSoft.connection.RatingDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -13,6 +13,10 @@ public class Rate {
         this.driverName = driverName;
     }
 
+    public Rate() {
+
+    }
+
     public int getRideId() {
         return rideId;
     }

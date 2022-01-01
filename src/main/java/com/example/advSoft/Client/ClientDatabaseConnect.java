@@ -1,10 +1,9 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Client;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.List;
 
 public class ClientDatabaseConnect implements IClientDatabaseConnect {
 

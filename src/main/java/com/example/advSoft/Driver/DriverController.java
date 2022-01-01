@@ -1,5 +1,13 @@
 package com.example.advSoft.Driver;
 
+import com.example.advSoft.Offer.IOfferDatabaseConnect;
+import com.example.advSoft.Offer.OfferController;
+import com.example.advSoft.Offer.OfferDatabaseConnect;
+import com.example.advSoft.Offer.OfferService;
+import com.example.advSoft.Ride.IReqRideDatabaseConnect;
+import com.example.advSoft.Ride.IRideDatabaseConnect;
+import com.example.advSoft.Ride.ReqRideDatabaseConnect;
+import com.example.advSoft.Ride.RideDatabaseConnect;
 import com.example.advSoft.User.UserServices;
 import com.example.advSoft.connection.*;
 import org.json.JSONArray;
@@ -9,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @RequestMapping("/api/driver")
@@ -21,7 +27,7 @@ public class DriverController implements DriverService , UserServices {
     IReqRideDatabaseConnect dbReqRide = new ReqRideDatabaseConnect();
     DataBaseConnect dbFavAreas = new FavAreasDatabaseConnect();
     IOfferDatabaseConnect dbOffer = new OfferDatabaseConnect();
-
+    OfferService offer = new OfferController();
     @Autowired
     DriverController(){
 
@@ -88,12 +94,7 @@ public class DriverController implements DriverService , UserServices {
     @Override
     @PostMapping
     public void sendOffer(@PathVariable("id") int id,@RequestBody  String req) throws SQLException, ClassNotFoundException {
-        JSONObject jsonObject = new JSONObject(req);
-        jsonObject.put("requestedrides_id", id);
-        if(dbRide.checkOpenedRide(jsonObject.get("driverName").toString()))
-            System.out.println("You can't send offer while you are in a Trip");
-        else
-            dbOffer.set(jsonObject);
+        offer.sendOffer(id,req);
     }
 
     //TEST REQUIRED

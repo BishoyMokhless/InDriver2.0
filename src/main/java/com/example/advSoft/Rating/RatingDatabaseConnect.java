@@ -1,12 +1,13 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Rating;
 
+import com.example.advSoft.connection.DataBaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.sql.*;
 
-public class RatingDatabaseConnect implements DataBaseConnect{
+public class RatingDatabaseConnect implements DataBaseConnect {
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";

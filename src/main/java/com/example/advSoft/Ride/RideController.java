@@ -1,14 +1,9 @@
 package com.example.advSoft.Ride;
 
-import com.example.advSoft.connection.IOfferDatabaseConnect;
-import com.example.advSoft.connection.IRideDatabaseConnect;
-import com.example.advSoft.connection.OfferDatabaseConnect;
-import com.example.advSoft.connection.RideDatabaseConnect;
+import com.example.advSoft.Offer.IOfferDatabaseConnect;
+import com.example.advSoft.Offer.OfferDatabaseConnect;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -17,6 +12,7 @@ import java.sql.SQLException;
 @RestController
 public class RideController implements  RideService {
 
+    IReqRideDatabaseConnect dbReqRide = new ReqRideDatabaseConnect();
 
     @RequestMapping("showDriverPrice/{rideID}")
     @Override
@@ -24,8 +20,8 @@ public class RideController implements  RideService {
     public String showDriverPrice(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException {
 
         IRideDatabaseConnect RDB=new RideDatabaseConnect();
-        int getRequstID=  RDB.getRequstID(rideID);
-        String offers= RDB.getOffersWithReqID(getRequstID);
+        int getRequestID=  RDB.getRequestID(rideID);
+        String offers= RDB.getOffersWithReqID(getRequestID);
         return offers;
 
     }
@@ -59,6 +55,14 @@ public class RideController implements  RideService {
         JSONObject RideArriveTime=new JSONObject();
         RideArriveTime.put("arrive_destination_time",ride.get("arrive_destination_time"));
         return RideArriveTime.toString();
+    }
+    @RequestMapping("RequestRide")
+    @Override
+    @PostMapping
+    public void RequestRide(@RequestBody String req) throws SQLException, ClassNotFoundException {
+        JSONObject jsonObject = new JSONObject(req);
+        dbReqRide.set(jsonObject);
+        System.out.println("one request created");
     }
 
 

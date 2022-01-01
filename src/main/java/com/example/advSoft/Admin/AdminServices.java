@@ -13,5 +13,9 @@ public interface AdminServices {
     public void suspendAccountClient(@RequestBody String req) throws SQLException, ClassNotFoundException;
     public void suspendAccountDriver(@RequestBody String req) throws SQLException, ClassNotFoundException;
     public void setDiscountArea(@RequestBody String areas) throws SQLException, ClassNotFoundException;
+    public String showDriverPrice(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException;
+    public String showAcceptedPriceOffer(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException;
+    public String driverArriveToSource(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException;
+    public String driverArriveToDestination(@PathVariable("rideID") int rideID) throws SQLException, ClassNotFoundException;
 
-}
+    }

@@ -1,12 +1,12 @@
-package com.example.advSoft.connection;
+package com.example.advSoft.Discount.FirstRideDiscount;
 
+import com.example.advSoft.Discount.IDiscountDatabaseConnect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.time.LocalDate;
 
-public class OfficialHolidayDatabaseConnect implements  IDiscountDatabaseConnect{
+public class FirstRideDiscountDatabseConnect  implements IDiscountDatabaseConnect {
     @Override
     public Connection establish_connection() throws SQLException, ClassNotFoundException {
         String url="jdbc:mysql://localhost:3306/sprint2";
@@ -17,7 +17,6 @@ public class OfficialHolidayDatabaseConnect implements  IDiscountDatabaseConnect
 
     @Override
     public void set(JSONObject object) throws SQLException, ClassNotFoundException {
-
 
     }
 
@@ -44,18 +43,18 @@ public class OfficialHolidayDatabaseConnect implements  IDiscountDatabaseConnect
     @Override
     public double getDiscount(String clientName) throws SQLException, ClassNotFoundException {
 
-        LocalDate localDate = LocalDate.now();
-        int day = localDate.getDayOfMonth();
-        int month = localDate.getMonthValue();
+
         Statement statement = establish_connection().createStatement();
-       ResultSet rs = statement.executeQuery("select *  from officialHoliday where day="+day+" and month="+month+" ");
+        ResultSet rs = statement.executeQuery("select * from requestedrides where clientName='"+clientName+"' and accepted = 1");
         if(rs.next())
-        {   System.out.println("discount 5% from Holidy");
-            String holiday = rs.getString("holidayName");
-             return 0.05;
-       }
-        else
+        {
+
             return 0;
+        }
+        else {
+            System.out.println("discount 10% from first");
+            return 0.1;
+        }
 
     }
 }

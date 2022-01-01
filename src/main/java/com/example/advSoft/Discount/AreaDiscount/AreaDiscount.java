@@ -1,9 +1,8 @@
-package com.example.advSoft.Discount;
+package com.example.advSoft.Discount.AreaDiscount;
 
-import com.example.advSoft.connection.AreaDiscountDatabseConnect;
-import com.example.advSoft.connection.DataBaseConnect;
-import com.example.advSoft.connection.IDiscountDatabaseConnect;
-import org.json.JSONArray;
+import com.example.advSoft.Discount.Discount;
+import com.example.advSoft.Discount.IDiscountDatabaseConnect;
+
 import java.sql.*;
 
 
