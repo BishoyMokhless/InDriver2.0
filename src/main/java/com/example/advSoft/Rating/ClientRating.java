@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 @RequestMapping("/api/rate")
 @RestController
-public class ClientRating implements IRating, RateService{
+public class ClientRating implements IClientRating, RateService{
     List<Float> driverRatings = new ArrayList<Float>();
     DataBaseConnect dbRating = new RatingDatabaseConnect();
     // didn't get the driver name yet

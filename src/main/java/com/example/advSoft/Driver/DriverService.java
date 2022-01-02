@@ -1,11 +1,12 @@
 package com.example.advSoft.Driver;
 
+import com.example.advSoft.User.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.sql.SQLException;
 
 public interface DriverService {
-    Driver driver = new Driver();
+    User driver = new Driver();
 
     public String listAllRequestedRides(@PathVariable("DriverName") String DriverName) throws SQLException, ClassNotFoundException;
     public String listAllDriverRides(@PathVariable("username") String drivername) throws SQLException, ClassNotFoundException;
