@@ -5,7 +5,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RideDatabaseConnect implements IRideDatabaseConnect {
@@ -49,8 +52,13 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
         while(rs.next())
         {
             ride.put("id",rs.getInt("id"));
-            ride.put("arrive_source_time",rs.getTimestamp("arrive_source_time"));
-            ride.put("arrive_destination_time",rs.getTimestamp("arrive_destination_time"));
+            String source= String.valueOf(rs.getTimestamp("arrive_source_time"));
+
+            String destination= String.valueOf(rs.getTimestamp("arrive_destination_time"));
+
+
+            ride.put("arrive_source_time", source);
+            ride.put("arrive_destination_time",destination);
             ride.put("discount_value",rs.getDouble("discount_value"));
             ride.put("discount_percent",rs.getDouble("discount_percent"));
             ride.put("price_after_discount",rs.getDouble("price_after_discount"));
@@ -108,18 +116,25 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
 
     //TEST REQUIRED
     @Override
-    public void update(JSONObject ride,int id) throws SQLException, ClassNotFoundException {
-        String query = " update  ride SET (offer_id, arrive_source_time, arrive_destination_time, discount_value, discount_percent, price_after_discount) values (?, ?, ?, ?, ?, ?) WHERE ('id = "+id+"')";
-        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
-        preparedStmt.setString(1, (String) ride.get("id"));
-        preparedStmt.setString (2, (String) ride.get("arrive_source_time)"));
-        preparedStmt.setString (3, (String) ride.get("arrive_destination_time"));
-        preparedStmt.setString (4, (String) ride.get("discount_value"));
-        preparedStmt.setString (5, (String) ride.get("discount_percent"));
-        preparedStmt.setString (6, (String) ride.get("price_after_discount"));
-        preparedStmt.executeUpdate();
-        establish_connection().close();
-        System.out.println("The Ride updated successfully");
+    public void update(JSONObject ride,int id) throws SQLException, ClassNotFoundException   {
+
+            String   query ="";
+            if(ride.get("arrive_destination_time").equals("null"))
+            {
+                    query = " update  ride SET id ="+id+", arrive_source_time='"+ride.get("arrive_source_time")+"' , discount_value='"+ride.get("discount_value")+"', discount_percent='"+ride.get("discount_percent")+"', price_after_discount='"+ride.get("price_after_discount")+"'   WHERE id = "+id+" ";
+
+            }
+            else
+            {
+                    query = " update  ride SET id ="+id+", arrive_source_time='"+ride.get("arrive_source_time")+"',arrive_destination_time='"+ride.get("arrive_destination_time")+"' , discount_value='"+ride.get("discount_value")+"', discount_percent='"+ride.get("discount_percent")+"', price_after_discount='"+ride.get("price_after_discount")+"'   WHERE id = "+id+" ";
+
+            }
+            PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+            preparedStmt.executeUpdate();
+            establish_connection().close();
+            System.out.println("The Ride updated successfully");
+
+
     }
 
     @Override

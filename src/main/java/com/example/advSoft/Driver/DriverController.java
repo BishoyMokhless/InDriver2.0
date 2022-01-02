@@ -105,10 +105,12 @@ public class DriverController implements DriverService , UserServices {
     public void startTrip(@PathVariable("id") int id) throws SQLException, ClassNotFoundException
     {
         JSONObject jsonObject = dbRide.get(id);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime now = LocalDateTime.now();
-        jsonObject.append("arrive_source_time", dtf.format(now));
-        dbRide.update(jsonObject, id);
+        String currentTime=now.toString();
+        jsonObject.remove("arrive_source_time");
+        jsonObject.put("arrive_source_time", currentTime);
+         dbRide.update(jsonObject, id);
     }
 
     //TEST REQUIRED
@@ -120,7 +122,9 @@ public class DriverController implements DriverService , UserServices {
         JSONObject jsonObject = dbRide.get(id);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        jsonObject.append("arrive_destination_time", dtf.format(now));
-        dbRide.update(jsonObject, id);
+        String currentTime=now.toString();
+        jsonObject.remove("arrive_destination_time");
+        jsonObject.put("arrive_destination_time", currentTime);
+         dbRide.update(jsonObject, id);
     }
 }

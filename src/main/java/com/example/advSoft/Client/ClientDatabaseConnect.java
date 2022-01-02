@@ -83,7 +83,7 @@ public class ClientDatabaseConnect implements ILoginDataBaseConnect, DataBaseCon
     @Override
     public JSONObject login(String client) throws SQLException, ClassNotFoundException {
 
-        JSONObject jsonObject = new JSONObject(client);
+         JSONObject jsonObject = new JSONObject(client);
         Statement statement = establish_connection().createStatement();
         ResultSet rs = statement.executeQuery("select *  from client where username='"+ (String) jsonObject.get("username") +"' and pass='"+ (String) jsonObject.get("pass") + "'" );
         JSONObject newjsonObject = new JSONObject();

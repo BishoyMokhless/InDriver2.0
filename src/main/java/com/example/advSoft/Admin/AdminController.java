@@ -129,7 +129,7 @@ public class AdminController implements AdminServices{
         System.out.println(areas);
         DataBaseConnect DB=new AreaDiscountDatabseConnect();
         JSONArray arr=new JSONArray(areas);
-        System.out.println(arr);
+
         for (int i=0;i<arr.length();i++)
         {
             JSONObject object=new JSONObject();

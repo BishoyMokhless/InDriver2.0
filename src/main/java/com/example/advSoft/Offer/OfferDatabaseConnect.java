@@ -96,12 +96,13 @@ public class OfferDatabaseConnect implements IOfferDatabaseConnect {
 
     @Override
     public String viewOffersOfClient(String clientName) throws SQLException, ClassNotFoundException {
-        JSONObject offer = new JSONObject();
+
         JSONArray offers = new JSONArray();
         Statement statement = establish_connection().createStatement();
         ResultSet rs = statement.executeQuery("SELECT *  FROM requestedrides INNER JOIN offer WHERE requestedrides.clientName = '" + clientName + "' and offer.accepted = 0");
         while(rs.next())
         {
+            JSONObject offer = new JSONObject();
             offer.put("id",rs.getString("offer.id"));
             offer.put("source",rs.getString("source"));
             offer.put("destination",rs.getString("destination"));
