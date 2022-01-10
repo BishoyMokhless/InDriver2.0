@@ -50,7 +50,7 @@ public class RatingDatabaseConnect implements DataBaseConnect {
     public JSONArray listAll() throws SQLException, ClassNotFoundException {
         JSONArray allRates = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select * from  rate INNER JOIN ride,offer,requestedrides");
+        ResultSet rs = statement.executeQuery("select * from  rate INNER JOIN ride,offer,requestedrides  where rate.id=ride.id and ride.id=offer.id  and offer.requestedrides_id=requestedrides.id");
         while(rs.next())
         {
             JSONObject jsonObject = new JSONObject();

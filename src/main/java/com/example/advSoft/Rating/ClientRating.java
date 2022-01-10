@@ -31,6 +31,7 @@ public class ClientRating implements IRating, RateService{
     public float viewAvg( @PathVariable String driverName) throws SQLException, ClassNotFoundException {
 
         String driverRating=viewRating(driverName);
+
         JSONArray jsonArray=new JSONArray(driverRating);
         Float avg= Float.valueOf(0);
         for (int i=0;i<jsonArray.length();i++)

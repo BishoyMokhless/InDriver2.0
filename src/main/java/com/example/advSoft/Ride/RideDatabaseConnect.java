@@ -173,7 +173,7 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
     public Integer getRequestID(int RideID) throws SQLException, ClassNotFoundException {
         Statement statement = establish_connection().createStatement();
         JSONArray allRides = new JSONArray();
-        ResultSet rs = statement.executeQuery("select * from  requestedrides  INNER JOIN  ride,offer where ride.id="+RideID+" ");
+        ResultSet rs = statement.executeQuery("select * from  requestedrides  INNER JOIN  ride,offer where ride.id="+RideID+" and ride.id=offer.id and offer.requestedrides_id=requestedrides.id ");
         if(rs.next())
             return rs.getInt("requestedrides_id");
         else
@@ -185,11 +185,12 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
     public String getOffersWithReqID(int ReqID) throws SQLException, ClassNotFoundException {
         JSONArray allRides = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("select * from offer inner join requestedrides where offer.requestedrides_id="+ReqID+"");
+        ResultSet rs = statement.executeQuery("select * from offer inner join requestedrides where offer.requestedrides_id="+ReqID+" and offer.requestedrides_id= requestedrides.id");
+        System.out.println("id req "+ReqID);
         while(rs.next())
         {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("OfferID",rs.getInt("id"));
+            jsonObject.put("OfferID",rs.getInt("offer.id"));
             jsonObject.put("driverName",rs.getString("driverName"));
             jsonObject.put("offerTime",rs.getTimestamp("offerTime"));
             jsonObject.put("price",rs.getDouble("price"));
@@ -198,6 +199,7 @@ public class RideDatabaseConnect implements IRideDatabaseConnect {
             jsonObject.put("clientName",rs.getString("clientName"));
             allRides.put(jsonObject);
         }
+
         return allRides.toString();
     }
 }

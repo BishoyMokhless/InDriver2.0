@@ -44,8 +44,11 @@ public class OfferController implements OfferService{
         int reqId = Integer.parseInt(temp);
         offer.put("accepted", 1);
         offer.put("accepted_time", dtf.format(now));
-        dbOffer.update(offer, id);
 
+
+        dbOffer.update(offer, id);
+        //delete any other offer to this request
+        dbOffer.deleteOfferWithReqID(reqId);
         reqride = dbReqRide.get(reqId);
 
         reqride.put("accepted", 1);

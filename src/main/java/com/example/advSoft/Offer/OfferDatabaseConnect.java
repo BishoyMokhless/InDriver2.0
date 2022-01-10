@@ -99,7 +99,7 @@ public class OfferDatabaseConnect implements IOfferDatabaseConnect {
 
         JSONArray offers = new JSONArray();
         Statement statement = establish_connection().createStatement();
-        ResultSet rs = statement.executeQuery("SELECT *  FROM requestedrides INNER JOIN offer WHERE requestedrides.clientName = '" + clientName + "' and offer.accepted = 0");
+        ResultSet rs = statement.executeQuery("SELECT *  FROM requestedrides INNER JOIN offer WHERE requestedrides.clientName = '" + clientName + "' and offer.accepted = 0 and requestedrides.accepted=0");
         while(rs.next())
         {
             JSONObject offer = new JSONObject();
@@ -114,6 +114,16 @@ public class OfferDatabaseConnect implements IOfferDatabaseConnect {
             offers.put(offer);
         }
         return offers.toString();
+    }
+
+    @Override
+    public void deleteOfferWithReqID(int id) throws SQLException, ClassNotFoundException {
+        String query = "delete from offer where requestedrides_id = '" + id + "' and accepted=0";
+        PreparedStatement preparedStmt = establish_connection().prepareStatement(query);
+        preparedStmt.executeUpdate();
+        establish_connection().close();
+        System.out.println("The other Offer/s is Deleted successfully");
+
     }
 
 }

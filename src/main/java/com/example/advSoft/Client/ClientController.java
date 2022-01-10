@@ -86,7 +86,7 @@ public class ClientController  implements  ClientService , UserServices {
     @GetMapping
     public Double checkDiscount(@PathVariable("ClientName") String ClientName) throws SQLException, ClassNotFoundException
     {
-         List<Double> discounts = new ArrayList<Double>();
+        List<Double> discounts = new ArrayList<Double>();
         JSONArray arr = new JSONArray();
         Discount discount1 = new BirthdayDiscount();
         discounts.add(discount1.getDiscount(ClientName));
