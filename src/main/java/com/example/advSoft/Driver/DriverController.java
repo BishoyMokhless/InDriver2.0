@@ -27,7 +27,6 @@ public class DriverController implements DriverService , UserServices {
     IRideDatabaseConnect dbRide = new RideDatabaseConnect();
     IReqRideDatabaseConnect dbReqRide = new ReqRideDatabaseConnect();
     DataBaseConnect dbFavAreas = new FavAreasDatabaseConnect();
-    IOfferDatabaseConnect dbOffer = new OfferDatabaseConnect();
     OfferService offer = new OfferController();
     @Autowired
     DriverController(){
